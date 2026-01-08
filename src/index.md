@@ -1,7 +1,7 @@
- ---
-  layout: base.njk
-  title: Home
-  ---
+---
+layout: base.njk
+title: Home
+---
 
   # Game Project Classification Standard
 

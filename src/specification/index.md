@@ -1,7 +1,7 @@
-  ---
-  layout: base.njk
-  title: Specification
-  ---
+---
+layout: base.njk
+title: Specification
+---
 
   # GPCS Specification v0.5
 

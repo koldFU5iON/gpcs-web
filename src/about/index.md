@@ -1,7 +1,7 @@
-  ---
-  layout: base.njk
-  title: About
-  ---
+---
+layout: base.njk
+title: About
+---
 
   # About GPCS
 
