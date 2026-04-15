@@ -4,8 +4,28 @@
 
 @layer base {
   :root {
-    --font-body:    "Inter", system-ui, sans-serif;
-    --font-display: "Russo One", sans-serif;
+    --font-body:    "Plus Jakarta Sans", system-ui, sans-serif;
+    --font-display: "Lexend", sans-serif;
+
+    /* ── Light theme ─────────────────────────────────────── */
+    --gpcs-bg:          #F8FAFC;
+    --gpcs-surface:     #FFFFFF;
+    --gpcs-surface-alt: #EEF2F7;
+    --gpcs-border:      #DDE3ED;
+    --gpcs-text:        #0F172A;
+    --gpcs-silver:      #475569;
+    --gpcs-muted:       #94A3B8;
+  }
+
+  .dark {
+    /* ── Dark theme ──────────────────────────────────────── */
+    --gpcs-bg:          #0A0A0F;
+    --gpcs-surface:     #131320;
+    --gpcs-surface-alt: #1C1C2C;
+    --gpcs-border:      rgba(255,255,255,0.08);
+    --gpcs-text:        #F0F0FA;
+    --gpcs-silver:      #8888AA;
+    --gpcs-muted:       #55557A;
   }
 
   * {
@@ -17,16 +37,17 @@
   }
 
   body {
-    background-color: #0a0a0f;
-    color: #f0f0fa;
+    background-color: var(--gpcs-bg);
+    color: var(--gpcs-text);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   ::selection {
     background-color: #00c8ff30;
-    color: #f0f0fa;
+    color: var(--gpcs-text);
   }
 
   /* Custom scrollbar */
@@ -34,10 +55,10 @@
     width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0a0a0f;
+    background: var(--gpcs-bg);
   }
   ::-webkit-scrollbar-thumb {
-    background: #1c1c2c;
+    background: var(--gpcs-surface-alt);
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
@@ -47,6 +68,11 @@
 
 @layer components {
   .glass-card {
+    background: var(--gpcs-surface);
+    border: 1px solid var(--gpcs-border);
+  }
+
+  .dark .glass-card {
     background: rgba(19, 19, 32, 0.7);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -58,9 +84,13 @@
   }
 
   .glass-card-hover:hover {
-    background: rgba(19, 19, 32, 0.9);
     border-color: rgba(0, 200, 255, 0.25);
     transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 200, 255, 0.08);
+  }
+
+  .dark .glass-card-hover:hover {
+    background: rgba(19, 19, 32, 0.9);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 200, 255, 0.08);
   }
 
@@ -76,17 +106,17 @@
   }
 
   .section-divider {
-    border-color: rgba(0, 200, 255, 0.12);
+    border-color: var(--gpcs-border);
   }
 }
 
-/* Badge glow — inherits tier color via inline style on the component */
+/* Badge glow */
 .badge-glow {
   filter: drop-shadow(0 0 24px rgba(0, 200, 255, 0.12));
 }
 
-/* Scanline overlay for the hero — subtle gaming texture */
-.scanlines::after {
+/* Scanline overlay — dark mode only */
+.dark .scanlines::after {
   content: "";
   pointer-events: none;
   position: absolute;
