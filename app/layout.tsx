@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
-import { Russo_One, Inter } from "next/font/google";
+import { Lexend, Plus_Jakarta_Sans } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 
-const russoOne = Russo_One({
+const lexend = Lexend({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: "400",
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
-const inter = Inter({
+const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-body",
   weight: ["300", "400", "500", "600", "700"],
@@ -57,11 +58,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${russoOne.variable} ${inter.variable}`}>
-      <body className="min-h-screen bg-gpcs-navy text-gpcs-text font-sans">
-        <Nav />
-        <main>{children}</main>
-        <Footer />
+    <html lang="en" className={`${lexend.variable} ${plusJakartaSans.variable}`} suppressHydrationWarning>
+      <body className="min-h-screen bg-gpcs-bg text-gpcs-text font-sans">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <Nav />
+          <main>{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

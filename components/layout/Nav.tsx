@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -14,12 +15,31 @@ const navLinks = [
   { href: "/about", label: "About" },
 ];
 
+function ThemeToggle() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return <div className="w-9 h-9" />;
+
+  return (
+    <button
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      className="flex h-9 w-9 items-center justify-center rounded-md border border-gpcs-border text-gpcs-silver hover:text-gpcs-text hover:border-gpcs-gold/40 transition-colors duration-200 cursor-pointer"
+      aria-label="Toggle theme"
+    >
+      {resolvedTheme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+    </button>
+  );
+}
+
 export default function Nav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/5 bg-gpcs-navy/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-gpcs-border bg-gpcs-bg/90 backdrop-blur-md">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
@@ -65,19 +85,22 @@ export default function Nav() {
           })}
         </ul>
 
-        {/* Mobile menu toggle */}
-        <button
-          className="flex items-center justify-center rounded-md p-2 text-gpcs-silver hover:text-gpcs-text md:hidden cursor-pointer transition-colors"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-        >
-          {menuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        {/* Right side: theme toggle + mobile menu */}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            className="flex items-center justify-center rounded-md p-2 text-gpcs-silver hover:text-gpcs-text md:hidden cursor-pointer transition-colors"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+          >
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="border-t border-white/5 bg-gpcs-slate md:hidden">
+        <div className="border-t border-gpcs-border bg-gpcs-surface md:hidden">
           <ul className="flex flex-col px-6 py-4 gap-1">
             {navLinks.map((link) => {
               const isActive =
