@@ -72,7 +72,7 @@ export const metadata: Metadata = {
       "GPCS replaces vague labels like 'indie' and 'AAA' with a structured, verifiable classification — seven capacity tiers, an independence marker, and three verification levels.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "GPCS — Game Project Classification Standard",
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     title: "GPCS — Game Project Classification Standard",
     description:
       "GPCS replaces vague labels like 'indie' and 'AAA' with a structured, verifiable classification for game projects.",
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
     creator: "@devonstanton",
   },
 };
