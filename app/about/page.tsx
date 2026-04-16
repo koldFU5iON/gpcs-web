@@ -64,11 +64,21 @@ export default async function AboutPage() {
             </h2>
             <p className="text-sm text-gpcs-muted mb-4">Creator, GPCS v{versionShort}</p>
             <p className="text-sm text-gpcs-silver leading-relaxed mb-6 max-w-2xl">
-              Devon Stanton is a game industry professional with a focus on the structural realities
-              facing independent developers. He created GPCS to address the absence of clear,
-              verifiable capacity terminology in the industry — drawing on the bond-rating model
-              used in financial markets to bring the same rigour to how game projects are described
-              and understood. He writes about games, design, and industry systems at{" "}
+              Devon Stanton is a senior operations and communications leader with 15+ years in the
+              games industry. He has held roles at Unity, Blizzard Entertainment, and 2K Games,
+              and has supported projects across Ubisoft, CD Projekt, Rockstar, Activision, and
+              Codemasters — with over 500 launches led across EMEA and APAC. Most recently he
+              architected the Unity Awards 2025 platform, generating 36,000 votes across 14,000
+              participants and 100+ studios.
+            </p>
+            <p className="text-sm text-gpcs-silver leading-relaxed mb-6 max-w-2xl">
+              That breadth of experience across studios, publishers, and platforms gave him a
+              clear view of how inconsistently the industry describes production capacity —
+              and how much confusion that creates for developers, press, investors, and players.
+              GPCS is his attempt to fix it: a structured, verifiable classification framework
+              modelled on the bond-rating system, designed to bring the same rigour to game
+              projects that financial markets bring to debt instruments. He writes about games,
+              design, and industry systems at{" "}
               <a
                 href="https://devonstanton.com"
                 target="_blank"
