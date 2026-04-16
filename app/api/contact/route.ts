@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
   }
 
   const { error } = await resend.emails.send({
-    from: "GPCS Contact <contact@gpcstandard.org>",
-    to: "devon.stanton@gmail.com",
+    from: `GPCS Contact <${process.env.CONTACT_FROM_EMAIL}>`,
+    to: process.env.CONTACT_TO_EMAIL!,
     replyTo: email,
     subject: `GPCS enquiry from ${name}`,
     text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
