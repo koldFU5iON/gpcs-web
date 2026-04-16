@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkHtml from "remark-html";
 import sanitizeHtml from "sanitize-html";
-import { Download, Star } from "lucide-react";
+import { Download } from "lucide-react";
 import SpecNav from "@/components/specification/SpecNav";
 import { fetchWhitepaper, WHITEPAPER_DOWNLOAD_URL } from "@/lib/gpcs/whitepaper";
 
@@ -117,16 +118,33 @@ export default async function SpecificationPage() {
             <span>CC BY 4.0</span>
           </div>
         </div>
-        <div className="flex items-center gap-3 shrink-0">
-          <a
-            href="https://github.com/koldFU5iON/gpcs"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-gpcs-gold/40 bg-gpcs-gold/10 px-4 py-2.5 text-sm font-medium text-gpcs-gold hover:bg-gpcs-gold/20 transition-colors"
-          >
-            <Star size={14} />
-            Star on GitHub
-          </a>
+        <div className="flex flex-wrap items-center gap-3 shrink-0">
+          {/* Official GitHub buttons — handle auth + live counts in their own iframe */}
+          <div className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a
+              className="github-button"
+              href="https://github.com/koldFU5iON/gpcs"
+              data-icon="octicon-star"
+              data-size="large"
+              data-show-count="true"
+              data-color-scheme="no-preference: dark; light: light; dark: dark;"
+              aria-label="Star koldFU5iON/gpcs on GitHub"
+            >
+              Star
+            </a>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a
+              className="github-button"
+              href="https://github.com/koldFU5iON/gpcs/discussions"
+              data-icon="octicon-comment-discussion"
+              data-size="large"
+              data-color-scheme="no-preference: dark; light: light; dark: dark;"
+              aria-label="Discuss koldFU5iON/gpcs on GitHub"
+            >
+              Discuss
+            </a>
+          </div>
           <a
             href={WHITEPAPER_DOWNLOAD_URL}
             target="_blank"
@@ -137,6 +155,7 @@ export default async function SpecificationPage() {
             Download Markdown
           </a>
         </div>
+        <Script src="https://buttons.github.io/buttons.js" strategy="lazyOnload" />
       </div>
 
       <div className="flex gap-8">
