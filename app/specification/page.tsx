@@ -3,7 +3,7 @@ import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkHtml from "remark-html";
 import sanitizeHtml from "sanitize-html";
-import { Download } from "lucide-react";
+import { Download, Star } from "lucide-react";
 import SpecNav from "@/components/specification/SpecNav";
 import { fetchWhitepaper, WHITEPAPER_DOWNLOAD_URL } from "@/lib/gpcs/whitepaper";
 
@@ -117,15 +117,26 @@ export default async function SpecificationPage() {
             <span>CC BY 4.0</span>
           </div>
         </div>
-        <a
-          href={WHITEPAPER_DOWNLOAD_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg border border-gpcs-border px-4 py-2.5 text-sm font-medium text-gpcs-silver hover:border-gpcs-gold/30 hover:text-gpcs-text transition-colors shrink-0"
-        >
-          <Download size={14} />
-          Download Markdown
-        </a>
+        <div className="flex items-center gap-3 shrink-0">
+          <a
+            href="https://github.com/koldFU5iON/gpcs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-gpcs-gold/40 bg-gpcs-gold/10 px-4 py-2.5 text-sm font-medium text-gpcs-gold hover:bg-gpcs-gold/20 transition-colors"
+          >
+            <Star size={14} />
+            Star on GitHub
+          </a>
+          <a
+            href={WHITEPAPER_DOWNLOAD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-gpcs-border px-4 py-2.5 text-sm font-medium text-gpcs-silver hover:border-gpcs-gold/30 hover:text-gpcs-text transition-colors"
+          >
+            <Download size={14} />
+            Download Markdown
+          </a>
+        </div>
       </div>
 
       <div className="flex gap-8">
