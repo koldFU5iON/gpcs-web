@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, ArrowRight, Star, Coffee, Globe } from "lucide-react";
+import { Github, ExternalLink, Star, Coffee, Globe } from "lucide-react";
 import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
+import ContactForm from "@/components/about/ContactForm";
 
 function LinkedInIcon({ size = 16 }: { size?: number }) {
   return (
@@ -337,23 +338,17 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Contact / feedback CTA */}
-      <div className="rounded-xl border border-white/10 bg-gpcs-slate/20 p-8 text-center">
-        <h2 className="font-display text-2xl font-bold text-gpcs-text mb-3">
-          Feedback & Contributions
+      {/* Contact form */}
+      <div className="rounded-xl border border-gpcs-border bg-gpcs-surface p-8">
+        <h2 className="font-display text-2xl font-bold text-gpcs-text mb-2">
+          Get in Touch
         </h2>
-        <p className="text-sm text-gpcs-silver mb-6 max-w-lg mx-auto">
-          GPCS is in active development. If you represent an awards body, grant programme, or
-          platform and want to explore implementation, or if you have critique and suggestions,
-          the author welcomes engagement.
+        <p className="text-sm text-gpcs-silver mb-6 max-w-xl">
+          If you represent an awards body, grant programme, or platform and want to explore
+          implementation — or if you have critique, suggestions, or questions about the
+          methodology — the author welcomes engagement.
         </p>
-        <a
-          href="mailto:devon.stanton@gmail.com"
-          className="inline-flex items-center gap-2 rounded-lg bg-gpcs-gold px-6 py-3 text-sm font-semibold text-gpcs-navy hover:bg-gpcs-gold-light transition-colors"
-        >
-          Get in touch
-          <ArrowRight size={16} />
-        </a>
+        <ContactForm />
       </div>
     </div>
   );
