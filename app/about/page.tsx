@@ -1,7 +1,24 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, ArrowRight, Star, Coffee } from "lucide-react";
+import { Github, ExternalLink, ArrowRight, Star, Coffee, Globe } from "lucide-react";
 import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
+
+function LinkedInIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  );
+}
+
+function SubstackIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" />
+    </svg>
+  );
+}
 
 export const metadata: Metadata = {
   title: "About",
@@ -24,22 +41,81 @@ export default async function AboutPage() {
       </div>
 
       {/* Author */}
-      <section className="mb-12 rounded-xl border border-white/10 bg-gpcs-slate/20 p-8">
-        <div className="flex flex-col sm:flex-row items-start gap-6">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gpcs-gold/15 border border-gpcs-gold/30">
-            <span className="font-display text-2xl font-bold text-gpcs-gold">D</span>
+      <section className="mb-12 rounded-xl border border-gpcs-border bg-gpcs-surface p-8">
+        <div className="flex flex-col sm:flex-row items-start gap-8">
+          {/* Photo */}
+          <div className="shrink-0">
+            <div className="relative h-24 w-24 overflow-hidden rounded-full border-2 border-gpcs-gold/30 ring-4 ring-gpcs-gold/10">
+              <Image
+                src="/profile-devon-stanton.jpg"
+                alt="Devon Stanton"
+                fill
+                className="object-cover"
+                sizes="96px"
+                priority
+              />
+            </div>
           </div>
-          <div>
-            <h2 className="font-display text-2xl font-bold text-gpcs-text mb-1">
+
+          {/* Bio */}
+          <div className="flex-1 min-w-0">
+            <h2 className="font-display text-2xl font-bold text-gpcs-text mb-0.5">
               Devon Stanton
             </h2>
             <p className="text-sm text-gpcs-muted mb-4">Creator, GPCS v{versionShort}</p>
-            <p className="text-sm text-gpcs-silver leading-relaxed max-w-xl">
-              Devon Stanton created the Game Project Classification Standard to address the lack of
-              structured, verifiable, and fair terminology in the game industry. GPCS draws on the
-              bond-rating model used in financial markets to bring the same clarity and structural
-              rigour to game project classification.
+            <p className="text-sm text-gpcs-silver leading-relaxed mb-6 max-w-2xl">
+              Devon Stanton is a game industry professional with a focus on the structural realities
+              facing independent developers. He created GPCS to address the absence of clear,
+              verifiable capacity terminology in the industry — drawing on the bond-rating model
+              used in financial markets to bring the same rigour to how game projects are described
+              and understood. He writes about games, design, and industry systems at{" "}
+              <a
+                href="https://devonstanton.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gpcs-gold hover:underline"
+              >
+                devonstanton.com
+              </a>
+              .
             </p>
+
+            {/* Social links */}
+            <div className="flex flex-wrap gap-3">
+              {[
+                {
+                  href: "https://devonstanton.com",
+                  label: "devonstanton.com",
+                  icon: <Globe size={14} />,
+                },
+                {
+                  href: "https://linkedin.com/in/devonstanton",
+                  label: "LinkedIn",
+                  icon: <LinkedInIcon size={14} />,
+                },
+                {
+                  href: "https://github.com/koldFU5iON",
+                  label: "GitHub",
+                  icon: <Github size={14} />,
+                },
+                {
+                  href: "https://substack.com/@devonstanton",
+                  label: "Substack",
+                  icon: <SubstackIcon size={14} />,
+                },
+              ].map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-gpcs-border px-3 py-1.5 text-xs text-gpcs-silver hover:border-gpcs-gold/40 hover:text-gpcs-gold transition-colors"
+                >
+                  {link.icon}
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
