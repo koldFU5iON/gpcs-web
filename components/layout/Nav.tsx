@@ -34,7 +34,7 @@ function ThemeToggle() {
   );
 }
 
-export default function Nav() {
+export default function Nav({ version }: { version: string }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -52,7 +52,7 @@ export default function Nav() {
             GPCS
           </span>
           <span className="hidden text-xs text-gpcs-muted sm:block">
-            v0.5
+            v{version}
           </span>
         </Link>
 

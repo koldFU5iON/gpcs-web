@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Github, ExternalLink } from "lucide-react";
+import { Github, ExternalLink, Star, Coffee } from "lucide-react";
 
-export default function Footer() {
+export default function Footer({ version }: { version: string }) {
   return (
-    <footer className="mt-24 border-t border-white/5 bg-gpcs-slate/30">
+    <footer className="mt-24 border-t border-gpcs-border bg-gpcs-surface">
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
           {/* Brand */}
@@ -15,12 +15,12 @@ export default function Footer() {
               <span className="font-display font-semibold text-gpcs-text">GPCS</span>
             </div>
             <p className="text-sm text-gpcs-muted leading-relaxed">
-              Game Project Classification Standard. A bond-style rating framework
+              Game Project Classification Standard. A structured rating framework
               for classifying game projects by production capacity and resource backing.
             </p>
             <div className="mt-3 flex items-center gap-2">
               <span className="rounded border border-gpcs-gold/30 bg-gpcs-gold/10 px-2 py-0.5 text-xs font-mono text-gpcs-gold">
-                v0.5.0
+                v{version}
               </span>
               <span className="text-xs text-gpcs-muted">Proposal under testing</span>
             </div>
@@ -51,7 +51,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* License & Citation */}
+          {/* License, Citation & Support */}
           <div>
             <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-gpcs-muted">
               License & Citation
@@ -67,22 +67,44 @@ export default function Footer() {
                 CC BY 4.0 <ExternalLink size={11} />
               </a>
             </p>
-            <p className="text-xs text-gpcs-muted font-mono bg-gpcs-slate/60 rounded px-3 py-2 leading-relaxed">
-              Stanton, D. (2025). <em>Game Project Classification Standard v0.5</em>. CC BY 4.0.
+            <p className="text-xs text-gpcs-muted font-mono bg-gpcs-surface-alt rounded px-3 py-2 leading-relaxed mb-4">
+              Stanton, D. (2025). <em>Game Project Classification Standard v{version}</em>. CC BY 4.0.
             </p>
-            <a
-              href="https://github.com/koldfu5ion/gpcs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex items-center gap-2 text-sm text-gpcs-silver hover:text-gpcs-gold transition-colors"
-            >
-              <Github size={14} />
-              GitHub Repository
-            </a>
+
+            {/* Support links */}
+            <div className="flex flex-col gap-2">
+              <a
+                href="https://github.com/koldfu5ion/gpcs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-gpcs-silver hover:text-gpcs-gold transition-colors"
+              >
+                <Star size={14} />
+                Star on GitHub
+              </a>
+              <a
+                href="https://ko-fi.com/devonstanton"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-gpcs-silver hover:text-gpcs-gold transition-colors"
+              >
+                <Coffee size={14} />
+                Support on Ko-fi
+              </a>
+              <a
+                href="https://github.com/koldfu5ion/gpcs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-gpcs-silver hover:text-gpcs-gold transition-colors"
+              >
+                <Github size={14} />
+                GitHub Repository
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="mt-10 border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="mt-10 border-t border-gpcs-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gpcs-muted">
             &copy; 2025 Devon Stanton. Ratings are capacity-based, not quality judgements.
           </p>

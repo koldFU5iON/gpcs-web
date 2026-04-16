@@ -4,6 +4,7 @@ import { ArrowRight, Award, Users, ShieldCheck, Layers } from "lucide-react";
 import RatingScaleVisual from "@/components/home/RatingScaleVisual";
 import RatingBadge from "@/components/rate/RatingBadge";
 import type { CalculationResult } from "@/lib/gpcs/types";
+import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
 
 export const metadata: Metadata = {
   title: "GPCS — Game Project Classification Standard",
@@ -11,14 +12,15 @@ export const metadata: Metadata = {
     "The game industry has never had a reliable way to classify projects. GPCS fixes that — a transparent, structured standard that tells you exactly what's behind any game project.",
 };
 
-const SAMPLE_RESULT: CalculationResult = {
+// Version is injected at render time from fetchWhitepaperVersion()
+const buildSampleResult = (versionShort: string): CalculationResult => ({
   capacityTier: "A",
   modifier: null,
   display: "A",
   independence: "I1",
   compositeScore: 77.5,
   verification: "Verified",
-  version: "0.5",
+  version: versionShort,
   breakdown: {
     studioScore: 75,
     studioTier: "A",
@@ -31,7 +33,7 @@ const SAMPLE_RESULT: CalculationResult = {
     floorApplied: false,
     ceilingApplied: false,
   },
-};
+});
 
 const PROBLEMS = [
   {
@@ -69,7 +71,10 @@ const USE_CASES = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { versionShort } = await fetchWhitepaperVersion();
+  const SAMPLE_RESULT = buildSampleResult(versionShort);
+
   return (
     <>
       {/* ── Hero ───────────────────────────────────────────────────────────── */}
@@ -92,7 +97,7 @@ export default function HomePage() {
             <div>
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-gpcs-gold/30 bg-gpcs-gold/10 px-3 py-1 text-xs font-medium text-gpcs-gold">
                 <span className="h-1.5 w-1.5 rounded-full bg-gpcs-gold animate-pulse" />
-                v0.5.0 — Proposal under testing
+                v{versionShort} — Proposal under testing
               </div>
 
               <h1 className="font-display font-semibold uppercase text-gpcs-text" style={{ fontSize: "clamp(1.8rem, 4vw, 3.5rem)", lineHeight: 1.1, letterSpacing: "0.02em" }}>
@@ -125,7 +130,7 @@ export default function HomePage() {
 
               {/* Social proof nudge */}
               <p className="mt-4 text-xs text-gpcs-muted">
-                Open standard · CC BY 4.0 · v0.5 pilot via Unity Awards
+                Open standard · CC BY 4.0 · v{versionShort} pilot via Unity Awards
               </p>
             </div>
 
@@ -282,7 +287,7 @@ export default function HomePage() {
               {
                 step: "03",
                 title: "Receive your classification",
-                desc: 'A code like "A / I1 — Unverified — v0.5" gives a complete, readable snapshot. Upgrade to Verified or Audited for formal recognition.',
+                desc: `A code like "A / I1 — Unverified — v${versionShort}" gives a complete, readable snapshot. Upgrade to Verified or Audited for formal recognition.`,
               },
             ].map((item) => (
               <div key={item.step} className="relative rounded-xl border border-gpcs-border bg-gpcs-surface p-6">

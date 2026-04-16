@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { readFileSync } from "fs";
-import { join } from "path";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkHtml from "remark-html";
 import sanitizeHtml from "sanitize-html";
 import { Download } from "lucide-react";
 import SpecNav from "@/components/specification/SpecNav";
+import { fetchWhitepaper, WHITEPAPER_DOWNLOAD_URL } from "@/lib/gpcs/whitepaper";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Specification",
@@ -60,7 +61,6 @@ async function renderMarkdown(content: string): Promise<string> {
 
   const rawHtml = addHeadingIds(String(remarkResult));
 
-  // Sanitize with an allowlist that preserves all standard markdown output elements
   const clean = sanitizeHtml(rawHtml, {
     allowedTags: [
       "h1", "h2", "h3", "h4", "h5", "h6",
@@ -88,10 +88,9 @@ async function renderMarkdown(content: string): Promise<string> {
 }
 
 export default async function SpecificationPage() {
-  const whitepaperPath = join(process.cwd(), "src", "GPCS-White-Paper.md");
-  const content = readFileSync(whitepaperPath, "utf-8");
-  const sections = extractSections(content);
-  const htmlContent = await renderMarkdown(content);
+  const { markdown, version, author, date } = await fetchWhitepaper();
+  const sections = extractSections(markdown);
+  const htmlContent = await renderMarkdown(markdown);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
@@ -105,19 +104,24 @@ export default async function SpecificationPage() {
             Game Project Classification Standard
           </h1>
           <div className="mt-2 flex items-center gap-3 text-xs text-gpcs-muted">
-            <span>v0.5.0</span>
+            <span>v{version}</span>
             <span>&bull;</span>
-            <span>Devon Stanton</span>
-            <span>&bull;</span>
-            <span>December 2025</span>
+            <span>{author}</span>
+            {date && (
+              <>
+                <span>&bull;</span>
+                <span>{date}</span>
+              </>
+            )}
             <span>&bull;</span>
             <span>CC BY 4.0</span>
           </div>
         </div>
         <a
-          href="/GPCS-White-Paper.md"
-          download
-          className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-sm font-medium text-gpcs-silver hover:border-white/30 hover:text-gpcs-text transition-colors shrink-0"
+          href={WHITEPAPER_DOWNLOAD_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-lg border border-gpcs-border px-4 py-2.5 text-sm font-medium text-gpcs-silver hover:border-gpcs-gold/30 hover:text-gpcs-text transition-colors shrink-0"
         >
           <Download size={14} />
           Download Markdown
@@ -130,8 +134,8 @@ export default async function SpecificationPage() {
           <SpecNav sections={sections} />
         </aside>
 
-        {/* White paper content — rendered from sanitized markdown */}
-        <article className="min-w-0 flex-1 rounded-xl border border-white/5 bg-gpcs-slate/10 p-6 sm:p-8 lg:p-10">
+        {/* White paper content */}
+        <article className="min-w-0 flex-1 rounded-xl border border-gpcs-border bg-gpcs-surface p-6 sm:p-8 lg:p-10">
           <WhitePaperContent html={htmlContent} />
         </article>
       </div>
@@ -139,13 +143,12 @@ export default async function SpecificationPage() {
   );
 }
 
-// Isolated component to contain the sanitized HTML rendering
 function WhitePaperContent({ html }: { html: string }) {
   return (
     // Content is sanitized server-side via sanitize-html before this point
     // eslint-disable-next-line react/no-danger
     <div
-      className="prose prose-gpcs max-w-none prose-headings:font-display prose-headings:text-gpcs-text prose-p:text-gpcs-silver prose-li:text-gpcs-silver prose-strong:text-gpcs-text prose-code:text-gpcs-gold prose-code:bg-gpcs-slate/60 prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-a:text-gpcs-gold hover:prose-a:underline prose-blockquote:border-gpcs-gold/40 prose-blockquote:text-gpcs-muted prose-hr:border-gpcs-slate-light prose-table:text-sm prose-th:text-gpcs-muted prose-td:text-gpcs-silver"
+      className="prose prose-gpcs max-w-none prose-headings:font-display prose-headings:text-gpcs-text prose-p:text-gpcs-silver prose-li:text-gpcs-silver prose-strong:text-gpcs-text prose-code:text-gpcs-gold prose-code:bg-gpcs-surface-alt prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm prose-a:text-gpcs-gold hover:prose-a:underline prose-blockquote:border-gpcs-gold/40 prose-blockquote:text-gpcs-muted prose-hr:border-gpcs-border prose-table:text-sm prose-th:text-gpcs-muted prose-td:text-gpcs-silver"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

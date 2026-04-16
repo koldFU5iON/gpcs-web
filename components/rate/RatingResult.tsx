@@ -6,6 +6,7 @@ import { RotateCcw, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
 import type { CalculationResult } from "@/lib/gpcs/types";
 import { TIER_HEX, TIER_DESCRIPTIONS } from "@/lib/gpcs/tiers";
 import { INDEPENDENCE_LABELS, INDEPENDENCE_DESCRIPTIONS } from "@/lib/gpcs/independence";
+import { GPCS_FALLBACK_VERSION } from "@/lib/gpcs/whitepaper";
 import RatingBadge from "./RatingBadge";
 
 interface RatingResultProps {
@@ -194,7 +195,7 @@ export default function RatingResult({ result, onReset }: RatingResultProps) {
             },
             {
               level: "Pilot Programme",
-              desc: "Apply to have your project included in the v0.5 testing cohort via Unity Awards.",
+              desc: `Apply to have your project included in the v${GPCS_FALLBACK_VERSION} testing cohort via Unity Awards.`,
               color: "#FFD700",
             },
           ].map((item) => (

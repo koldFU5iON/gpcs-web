@@ -6,6 +6,7 @@ import { TIER_HEX, TIER_ORDER } from "@/lib/gpcs/tiers";
 import type { CapacityTier } from "@/lib/gpcs/types";
 import { INDEPENDENCE_LABELS, INDEPENDENCE_DESCRIPTIONS } from "@/lib/gpcs/independence";
 import type { IndependenceTier } from "@/lib/gpcs/types";
+import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
 
 export const metadata: Metadata = {
   title: "How It Works",
@@ -23,7 +24,8 @@ const TIER_STUDIO_DETAILS: Record<CapacityTier, { teamSize: string; infrastructu
   C: { teamSize: "1–4", infrastructure: "None or minimal", trackRecord: "No commercial releases" },
 };
 
-export default function HowItWorksPage() {
+export default async function HowItWorksPage() {
+  const { versionShort } = await fetchWhitepaperVersion();
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
       {/* Header */}
@@ -73,7 +75,7 @@ export default function HowItWorksPage() {
         <div className="rounded-xl border border-gpcs-gold/30 bg-gpcs-slate/30 p-5 text-center">
           <p className="text-sm text-gpcs-muted mb-1">A complete GPC rating looks like:</p>
           <p className="font-mono text-2xl font-semibold text-gpcs-gold">
-            A / I1 — Verified ●●○ — v0.5
+            {`A / I1 — Verified ●●○ — v${versionShort}`}
           </p>
           <p className="text-xs text-gpcs-muted mt-2">
             Capacity / Independence — Verification level — Specification version

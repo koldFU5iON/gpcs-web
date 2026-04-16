@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
+import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -52,18 +53,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { versionShort } = await fetchWhitepaperVersion();
+
   return (
     <html lang="en" className={`${lexend.variable} ${plusJakartaSans.variable}`} suppressHydrationWarning>
       <body className="min-h-screen bg-gpcs-bg text-gpcs-text font-sans">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <Nav />
+          <Nav version={versionShort} />
           <main>{children}</main>
-          <Footer />
+          <Footer version={versionShort} />
         </ThemeProvider>
       </body>
     </html>

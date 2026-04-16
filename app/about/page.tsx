@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Github, ExternalLink, ArrowRight } from "lucide-react";
+import { Github, ExternalLink, ArrowRight, Star, Coffee } from "lucide-react";
+import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
 
 export const metadata: Metadata = {
   title: "About",
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
     "About the Game Project Classification Standard — author, governance, licensing, and how to contribute.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { version, versionShort } = await fetchWhitepaperVersion();
   return (
     <div className="mx-auto max-w-4xl px-6 py-12">
       {/* Header */}
@@ -31,7 +33,7 @@ export default function AboutPage() {
             <h2 className="font-display text-2xl font-bold text-gpcs-text mb-1">
               Devon Stanton
             </h2>
-            <p className="text-sm text-gpcs-muted mb-4">Creator, GPCS v0.5</p>
+            <p className="text-sm text-gpcs-muted mb-4">Creator, GPCS v{versionShort}</p>
             <p className="text-sm text-gpcs-silver leading-relaxed max-w-xl">
               Devon Stanton created the Game Project Classification Standard to address the lack of
               structured, verifiable, and fair terminology in the game industry. GPCS draws on the
@@ -51,7 +53,7 @@ export default function AboutPage() {
           {[
             {
               label: "Version",
-              value: "v0.5.0",
+              value: `v${version}`,
               desc: "Comprehensive proposal under testing",
               color: "#FFD700",
             },
@@ -133,7 +135,7 @@ export default function AboutPage() {
         </h2>
         <div className="space-y-4">
           <div className="rounded-lg border border-white/10 bg-gpcs-slate/20 p-5">
-            <h3 className="font-semibold text-gpcs-text mb-2">Current (v0.5)</h3>
+            <h3 className="font-semibold text-gpcs-text mb-2">Current (v{versionShort})</h3>
             <p className="text-sm text-gpcs-muted leading-relaxed">
               Maintained by the author (Devon Stanton). Community proposals via GitHub Issues.
               Quarterly review cycles, annual major releases. All changes documented in the changelog.
@@ -177,13 +179,13 @@ export default function AboutPage() {
             <div>
               <p className="text-xs text-gpcs-muted uppercase tracking-wider mb-1">APA Citation</p>
               <p className="font-mono text-xs bg-gpcs-slate/60 rounded px-3 py-2 text-gpcs-silver">
-                Stanton, D. (2025). <em>Game Project Classification Standard (GPCS): A Bond-Style Rating System for Game Projects</em> (Version 0.5). CC BY 4.0.
+                Stanton, D. (2025). <em>Game Project Classification Standard (GPCS): A Bond-Style Rating System for Game Projects</em> (Version {version}). CC BY 4.0.
               </p>
             </div>
             <div>
               <p className="text-xs text-gpcs-muted uppercase tracking-wider mb-1">Implementation Attribution</p>
               <p className="font-mono text-xs bg-gpcs-slate/60 rounded px-3 py-2 text-gpcs-silver">
-                Classification system based on Devon Stanton&apos;s Game Project Classification Standard (GPCS v0.5)
+                Classification system based on Devon Stanton&apos;s Game Project Classification Standard (GPCS v{versionShort})
               </p>
             </div>
           </div>
@@ -216,6 +218,37 @@ export default function AboutPage() {
             <p className="text-xs text-gpcs-muted">Read the complete white paper</p>
           </div>
         </Link>
+      </section>
+
+      {/* Support this project */}
+      <section className="mb-8 rounded-xl border border-gpcs-gold/20 bg-gpcs-gold/5 p-8">
+        <h2 className="font-display text-2xl font-bold text-gpcs-text mb-2">
+          Support This Project
+        </h2>
+        <p className="text-sm text-gpcs-silver mb-6 max-w-xl">
+          GPCS is a solo, open-source initiative. A GitHub star signals industry interest and helps
+          the standard gain visibility. If you find this work valuable, a Ko-fi helps sustain it.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <a
+            href="https://github.com/koldfu5ion/gpcs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-gpcs-gold/40 bg-gpcs-gold/10 px-5 py-3 text-sm font-semibold text-gpcs-gold hover:bg-gpcs-gold/20 transition-colors"
+          >
+            <Star size={16} />
+            Star on GitHub
+          </a>
+          <a
+            href="https://ko-fi.com/devonstanton"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-gpcs-border px-5 py-3 text-sm font-medium text-gpcs-silver hover:border-gpcs-gold/30 hover:text-gpcs-text transition-colors"
+          >
+            <Coffee size={16} />
+            Support on Ko-fi
+          </a>
+        </div>
       </section>
 
       {/* Contact / feedback CTA */}
