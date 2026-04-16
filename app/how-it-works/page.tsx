@@ -7,11 +7,20 @@ import type { CapacityTier } from "@/lib/gpcs/types";
 import { INDEPENDENCE_LABELS, INDEPENDENCE_DESCRIPTIONS } from "@/lib/gpcs/independence";
 import type { IndependenceTier } from "@/lib/gpcs/types";
 import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
+import JsonLd from "@/components/seo/JsonLd";
+import { howItWorksSchema, webPageSchema } from "@/lib/seo/jsonld";
 
 export const metadata: Metadata = {
   title: "How It Works",
   description:
-    "A visual guide to the GPCS framework — how sources are scored, combined, and constrained to produce a GPC capacity rating.",
+    "How GPCS calculates a game project rating: studio capacity (55%), publisher/funder (35%), and other sources (10%) are scored, weighted, and constrained to produce a verifiable GPC classification.",
+  alternates: { canonical: "https://gpcstandard.org/how-it-works" },
+  openGraph: {
+    url: "https://gpcstandard.org/how-it-works",
+    title: "How GPCS Works — Methodology Explained",
+    description:
+      "A step-by-step guide to the GPCS scoring algorithm — source types, weightings, floor and ceiling constraints, independence markers, and verification levels.",
+  },
 };
 
 const TIER_STUDIO_DETAILS: Record<CapacityTier, { teamSize: string; infrastructure: string; trackRecord: string }> = {
@@ -28,6 +37,19 @@ export default async function HowItWorksPage() {
   const { versionShort } = await fetchWhitepaperVersion();
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
+      <JsonLd data={[
+        webPageSchema({
+          name: "How GPCS Works — Methodology Explained",
+          description: "Step-by-step guide to the GPCS scoring algorithm, tier definitions, independence markers, and verification levels.",
+          url: "https://gpcstandard.org/how-it-works",
+          breadcrumbs: [
+            { name: "Home", url: "https://gpcstandard.org" },
+            { name: "How It Works", url: "https://gpcstandard.org/how-it-works" },
+          ],
+        }),
+        howItWorksSchema,
+      ]} />
+
       {/* Header */}
       <div className="mb-12 text-center">
         <p className="text-xs font-semibold uppercase tracking-widest text-gpcs-muted mb-2">

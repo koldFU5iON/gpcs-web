@@ -1,15 +1,36 @@
 import type { Metadata } from "next";
 import RatingForm from "@/components/rate/RatingForm";
+import JsonLd from "@/components/seo/JsonLd";
+import { ratingToolSchema, webPageSchema } from "@/lib/seo/jsonld";
 
 export const metadata: Metadata = {
   title: "Rate Your Project",
   description:
-    "Answer 15 questions about your studio, publisher, and funding sources to receive an unverified GPC capacity rating.",
+    "Classify your game project in ~10 minutes. Answer 15 questions about your studio, publisher, and funding sources — the GPCS algorithm returns your capacity tier (AAA–C), independence marker, and verification level.",
+  alternates: { canonical: "https://gpcstandard.org/rate" },
+  openGraph: {
+    url: "https://gpcstandard.org/rate",
+    title: "Rate Your Game Project — GPCS Classification Tool",
+    description:
+      "Free, anonymous, no account required. 15 questions. Get your GPC capacity rating in ~10 minutes.",
+  },
 };
 
 export default function RatePage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
+      <JsonLd data={[
+        webPageSchema({
+          name: "Rate Your Game Project — GPCS Classification Tool",
+          description: "Free interactive tool. Answer 15 questions to receive a GPC capacity rating for your game project.",
+          url: "https://gpcstandard.org/rate",
+          breadcrumbs: [
+            { name: "Home", url: "https://gpcstandard.org" },
+            { name: "Rate Your Project", url: "https://gpcstandard.org/rate" },
+          ],
+        }),
+        ratingToolSchema,
+      ]} />
       {/* Header */}
       <div className="mb-10 text-center">
         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-gpcs-gold/30 bg-gpcs-gold/10 px-3 py-1 text-xs font-medium text-gpcs-gold">

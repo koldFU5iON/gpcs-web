@@ -5,11 +5,20 @@ import RatingScaleVisual from "@/components/home/RatingScaleVisual";
 import RatingBadge from "@/components/rate/RatingBadge";
 import type { CalculationResult } from "@/lib/gpcs/types";
 import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
+import JsonLd from "@/components/seo/JsonLd";
+import { homepageFaqSchema, webPageSchema } from "@/lib/seo/jsonld";
 
 export const metadata: Metadata = {
   title: "GPCS — Game Project Classification Standard",
   description:
-    "The game industry has never had a reliable way to classify projects. GPCS fixes that — a transparent, structured standard that tells you exactly what's behind any game project.",
+    "GPCS gives the games industry a shared language for project scale. Seven capacity tiers (C to AAA), an independence marker, and a verification level — replacing vague labels with a structured, verifiable standard.",
+  alternates: { canonical: "https://gpcstandard.org" },
+  openGraph: {
+    url: "https://gpcstandard.org",
+    title: "GPCS — Game Project Classification Standard",
+    description:
+      "Seven capacity tiers. An independence marker. Three verification levels. The game industry finally has a classification standard.",
+  },
 };
 
 // Version is injected at render time from fetchWhitepaperVersion()
@@ -77,6 +86,15 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={[
+        webPageSchema({
+          name: "GPCS — Game Project Classification Standard",
+          description: "The official home of GPCS — a structured, bond-style rating framework for classifying game projects by production capacity and resource backing.",
+          url: "https://gpcstandard.org",
+        }),
+        homepageFaqSchema,
+      ]} />
+
       {/* ── Hero ───────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden border-b border-gpcs-border bg-gpcs-bg">
         {/* Layered background: radial glow + subtle grid */}

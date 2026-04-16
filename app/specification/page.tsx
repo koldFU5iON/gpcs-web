@@ -7,13 +7,22 @@ import sanitizeHtml from "sanitize-html";
 import { Download } from "lucide-react";
 import SpecNav from "@/components/specification/SpecNav";
 import { fetchWhitepaper, WHITEPAPER_DOWNLOAD_URL } from "@/lib/gpcs/whitepaper";
+import JsonLd from "@/components/seo/JsonLd";
+import { specificationSchema, webPageSchema } from "@/lib/seo/jsonld";
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Specification",
   description:
-    "The full Game Project Classification Standard white paper — methodology, tier definitions, scoring algorithm, and governance.",
+    "The full GPCS white paper — complete methodology, seven capacity tier definitions, scoring algorithm with source weightings, independence markers (I0–I3), verification levels, and governance model.",
+  alternates: { canonical: "https://gpcstandard.org/specification" },
+  openGraph: {
+    url: "https://gpcstandard.org/specification",
+    title: "GPCS Specification — Full White Paper",
+    description:
+      "The complete Game Project Classification Standard specification. Tier definitions, scoring algorithm, independence markers, and governance.",
+  },
 };
 
 function extractSections(markdown: string) {
@@ -95,6 +104,18 @@ export default async function SpecificationPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
+      <JsonLd data={[
+        webPageSchema({
+          name: "GPCS Specification — Full White Paper",
+          description: "The complete GPCS white paper including methodology, tier definitions, scoring algorithm, independence markers, and governance.",
+          url: "https://gpcstandard.org/specification",
+          breadcrumbs: [
+            { name: "Home", url: "https://gpcstandard.org" },
+            { name: "Specification", url: "https://gpcstandard.org/specification" },
+          ],
+        }),
+        specificationSchema(version),
+      ]} />
       {/* Header */}
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

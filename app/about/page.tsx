@@ -5,6 +5,8 @@ import { Github, ExternalLink, Star, Globe } from "lucide-react";
 import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
 import ContactForm from "@/components/about/ContactForm";
 import KofiWidget from "@/components/about/KofiWidget";
+import JsonLd from "@/components/seo/JsonLd";
+import { authorSchema, webPageSchema } from "@/lib/seo/jsonld";
 
 function LinkedInIcon({ size = 16 }: { size?: number }) {
   return (
@@ -25,13 +27,33 @@ function SubstackIcon({ size = 16 }: { size?: number }) {
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About the Game Project Classification Standard — author, governance, licensing, and how to contribute.",
+    "About GPCS and its creator Devon Stanton — senior games industry professional with 15+ years at Unity, Blizzard, and 2K Games. Governance model, CC BY 4.0 license, citation guide, and how to get involved.",
+  alternates: { canonical: "https://gpcstandard.org/about" },
+  openGraph: {
+    url: "https://gpcstandard.org/about",
+    title: "About GPCS — The Standard & Its Author",
+    description:
+      "GPCS was created by Devon Stanton — 15+ years in the games industry across Unity, Blizzard, and 2K Games. Open standard, CC BY 4.0.",
+  },
 };
 
 export default async function AboutPage() {
   const { version, versionShort } = await fetchWhitepaperVersion();
   return (
     <div className="mx-auto max-w-4xl px-6 py-12">
+      <JsonLd data={[
+        webPageSchema({
+          name: "About GPCS — The Standard & Its Author",
+          description: "About the Game Project Classification Standard and its creator Devon Stanton.",
+          url: "https://gpcstandard.org/about",
+          breadcrumbs: [
+            { name: "Home", url: "https://gpcstandard.org" },
+            { name: "About", url: "https://gpcstandard.org/about" },
+          ],
+        }),
+        authorSchema,
+      ]} />
+
       {/* Header */}
       <div className="mb-12 text-center">
         <p className="text-xs font-semibold uppercase tracking-widest text-gpcs-muted mb-2">
