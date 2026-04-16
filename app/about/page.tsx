@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, ExternalLink, Star, Coffee, Globe } from "lucide-react";
+import { Github, ExternalLink, Star, Globe } from "lucide-react";
 import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
 import ContactForm from "@/components/about/ContactForm";
+import KofiWidget from "@/components/about/KofiWidget";
 
 function LinkedInIcon({ size = 16 }: { size?: number }) {
   return (
@@ -326,15 +327,7 @@ export default async function AboutPage() {
             <Star size={16} />
             Star on GitHub
           </a>
-          <a
-            href="https://ko-fi.com/devonstanton"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-gpcs-border px-5 py-3 text-sm font-medium text-gpcs-silver hover:border-gpcs-gold/30 hover:text-gpcs-text transition-colors"
-          >
-            <Coffee size={16} />
-            Support on Ko-fi
-          </a>
+          <KofiWidget />
         </div>
       </section>
 
