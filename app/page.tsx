@@ -144,6 +144,36 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── Video overview ─────────────────────────────────────────────────── */}
+      <section className="border-b border-gpcs-border py-16">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="mb-8 text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-gpcs-muted mb-2">
+              Watch the Overview
+            </p>
+            <h2 className="font-display text-2xl font-semibold text-gpcs-text">
+              The methodology explained in 10 minutes
+            </h2>
+            <p className="mt-2 text-sm text-gpcs-muted max-w-lg mx-auto">
+              An audio overview generated from the GPCS white paper — the full framework
+              without reading 20 pages.
+            </p>
+          </div>
+
+          {/* 16:9 responsive embed */}
+          <div className="relative w-full overflow-hidden rounded-xl border border-gpcs-border" style={{ paddingTop: "56.25%" }}>
+            <iframe
+              className="absolute inset-0 h-full w-full"
+              src="https://www.youtube-nocookie.com/embed/8aZhNoMr9SI?rel=0&modestbranding=1"
+              title="GPCS Explained — The Game Project Classification Standard"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* ── The scale ──────────────────────────────────────────────────────── */}
       <section className="border-b border-gpcs-border bg-gpcs-surface py-16">
         <div className="mx-auto max-w-7xl px-6">
