@@ -33,12 +33,24 @@ function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
 // ---------------------------------------------------------------------------
 let billingPaused = false;
 
-const ALLOWED_ORIGIN = "https://gpcstandard.org";
+const ALLOWED_ORIGINS = [
+  "https://gpcstandard.org",
+  "https://www.gpcstandard.org",
+];
+
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  if (process.env.NODE_ENV === "development") return true;
+  if (ALLOWED_ORIGINS.includes(origin)) return true;
+  // Allow Vercel preview deployments
+  if (origin.endsWith(".vercel.app")) return true;
+  return false;
+}
 
 function corsHeaders(origin: string | null) {
-  const allowed = origin === ALLOWED_ORIGIN || process.env.NODE_ENV === "development";
+  const allowed = isAllowedOrigin(origin);
   return {
-    "Access-Control-Allow-Origin": allowed ? (origin ?? ALLOWED_ORIGIN) : ALLOWED_ORIGIN,
+    "Access-Control-Allow-Origin": allowed ? (origin ?? ALLOWED_ORIGINS[0]) : ALLOWED_ORIGINS[0],
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
@@ -132,9 +144,8 @@ ${whitepaper}`;
 // ---------------------------------------------------------------------------
 export async function POST(req: NextRequest) {
   const origin = req.headers.get("origin");
-  const isAllowed = origin === ALLOWED_ORIGIN || process.env.NODE_ENV === "development";
 
-  if (!isAllowed) {
+  if (!isAllowedOrigin(origin)) {
     return new Response(JSON.stringify({ error: "Forbidden" }), {
       status: 403,
       headers: { "Content-Type": "application/json" },
