@@ -8,6 +8,7 @@ import { fetchWhitepaperVersion } from "@/lib/gpcs/whitepaper";
 import { Analytics } from "@vercel/analytics/next";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema, websiteSchema } from "@/lib/seo/jsonld";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -104,6 +105,7 @@ export default async function RootLayout({
           <Nav version={versionShort} />
           <main>{children}</main>
           <Footer version={versionShort} />
+          {process.env.CHAT_ENABLED !== "false" && <ChatWidget />}
         </ThemeProvider>
         <Analytics />
       </body>
