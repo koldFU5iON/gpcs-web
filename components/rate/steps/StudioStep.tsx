@@ -61,7 +61,7 @@ const teamSizeOptions: OptionCard<TeamSizeBracket>[] = [
   { value: "15-30", label: "15–30 people", description: "Small studio with dedicated departments forming" },
   { value: "30-80", label: "30–80 people", description: "Mid-size studio with clear departmental structure" },
   { value: "80-200", label: "80–200 people", description: "Large studio with multiple full departments" },
-  { value: "200+", label: "200+ people", description: "Major studio with multiple projects running simultaneously" },
+  { value: "200+", label: "200+ people", description: "Large-scale project with full studio support infrastructure" },
 ];
 
 const infrastructureOptions: OptionCard<InfrastructureLevel>[] = [
@@ -105,11 +105,11 @@ export default function StudioStep({ answers, onChange }: StudioStepProps) {
   return (
     <div>
       <h2 className="mb-1 font-display text-xl font-semibold text-gpcs-text">
-        Your Studio
+        Your Project Team
       </h2>
       <p className="mb-6 text-sm text-gpcs-muted">
-        Tell us about the studio&apos;s production capacity at the time this project was rated.
         Answer based on resources dedicated to this project, not total studio headcount.
+        Contractors working 6 months or more on the project count toward team size.
       </p>
 
       <RadioCardGroup
@@ -120,7 +120,7 @@ export default function StudioStep({ answers, onChange }: StudioStepProps) {
       />
 
       <RadioCardGroup
-        question="Q2. How would you describe the studio's infrastructure and processes?"
+        question="Q2. What level of production infrastructure does this project operate within?"
         options={infrastructureOptions}
         value={answers.q2_infrastructure}
         onChange={(v) => onChange({ q2_infrastructure: v })}

@@ -59,8 +59,8 @@ export default async function HowItWorksPage() {
           How GPCS Works
         </h1>
         <p className="text-gpcs-silver max-w-2xl mx-auto">
-          A step-by-step guide to how production capacity is measured, sources are weighted,
-          constraints are applied, and an independence marker is assigned.
+          Three source types scored, combined with weightings, checked against two constraints,
+          then read against a tier table — the sections below cover each step.
         </p>
       </div>
 

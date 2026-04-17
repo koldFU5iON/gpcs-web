@@ -58,7 +58,7 @@ const PROBLEMS = [
   {
     icon: ShieldCheck,
     title: "Grants can't define eligibility",
-    body: 'Funding programmes struggle to draw a line between "independent" and "publisher-backed" in ways that are transparent, consistent, and hard to game. Vague criteria get gamed.',
+    body: 'Funding programmes can\'t draw a clean line between "independent" and "publisher-backed" — so they write vague criteria, and vague criteria get gamed. GPCS gives them something concrete to point to.',
   },
 ];
 
@@ -76,7 +76,7 @@ const USE_CASES = [
   {
     icon: Layers,
     title: "Platforms & Publishers",
-    body: "Segment incoming projects for differentiated support tiers. Identify punch-above-weight teams and studios in their growth phase.",
+    body: "Segment incoming projects for differentiated support tiers. Spot smaller studios whose output outpaces their rating and route them to the right programme.",
   },
 ];
 
