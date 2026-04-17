@@ -138,7 +138,7 @@ function InfoPanel({
         </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-gpcs-muted mb-2">
-            What it can't answer
+            What it can&apos;t answer
           </p>
           <ul className="space-y-1.5">
             {[
