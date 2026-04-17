@@ -170,7 +170,7 @@ export default async function HomePage() {
               Watch the Overview
             </p>
             <h2 className="font-display text-2xl font-semibold text-gpcs-text">
-              The methodology explained in 10 minutes
+              The methodology explained in under 10 minutes
             </h2>
             <p className="mt-2 text-sm text-gpcs-muted max-w-lg mx-auto">
               An audio overview generated from the GPCS white paper — the full framework
