@@ -9,6 +9,7 @@ import { Analytics } from "@vercel/analytics/next";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema, websiteSchema } from "@/lib/seo/jsonld";
 import ChatWidget from "@/components/chat/ChatWidget";
+import EngagementPopover from "@/components/engagement/EngagementPopover";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -106,6 +107,7 @@ export default async function RootLayout({
           <main>{children}</main>
           <Footer version={versionShort} />
           {process.env.CHAT_ENABLED !== "false" && <ChatWidget />}
+          <EngagementPopover />
         </ThemeProvider>
         <Analytics />
       </body>
