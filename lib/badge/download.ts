@@ -2,49 +2,51 @@ import type { CalculationResult } from "@/lib/gpcs/types";
 import { TIER_HEX } from "@/lib/gpcs/tiers";
 import { INDEPENDENCE_LABELS } from "@/lib/gpcs/independence";
 
-function buildBadgeElement(result: CalculationResult, gameName?: string): HTMLDivElement {
+function buildBadgeElement(result: CalculationResult, gameName?: string, width = 560): HTMLDivElement {
   const tierColor = TIER_HEX[result.capacityTier];
   const independenceLabel = INDEPENDENCE_LABELS[result.independence].replace(/^I\d — /, "");
+  const s = width / 560; // scale factor
+  const px = (n: number) => `${Math.round(n * s)}px`;
 
   const el = document.createElement("div");
   Object.assign(el.style, {
     position: "fixed", top: "0", left: "0", zIndex: "99999",
-    pointerEvents: "none", width: "560px", height: "500px",
+    pointerEvents: "none", width: `${width}px`, height: px(500),
     fontFamily: "'Courier New', Courier, monospace",
     background: "#131320", border: `1px solid ${tierColor}40`,
-    borderRadius: "12px",
-    boxShadow: `0 0 60px ${tierColor}18, 0 0 120px ${tierColor}08`,
-    padding: "32px 40px", boxSizing: "border-box", overflow: "hidden",
+    borderRadius: px(12),
+    boxShadow: `0 0 ${px(60)} ${tierColor}18, 0 0 ${px(120)} ${tierColor}08`,
+    padding: `${px(32)} ${px(40)}`, boxSizing: "border-box", overflow: "hidden",
     display: "flex", flexDirection: "column",
   });
 
   // Top colour strip
   const strip = document.createElement("div");
   Object.assign(strip.style, {
-    position: "absolute", top: "0", left: "0", right: "0", height: "4px",
+    position: "absolute", top: "0", left: "0", right: "0", height: px(4),
     background: `linear-gradient(90deg, ${tierColor}60, ${tierColor}CC, ${tierColor}60)`,
-    borderRadius: "12px 12px 0 0",
+    borderRadius: `${px(12)} ${px(12)} 0 0`,
   });
   el.appendChild(strip);
 
   // Header label
   const header = document.createElement("p");
   Object.assign(header.style, {
-    fontSize: "11px", fontWeight: "600", letterSpacing: "0.2em",
+    fontSize: px(11), fontWeight: "600", letterSpacing: "0.2em",
     textTransform: "uppercase", color: "#55557A",
-    marginBottom: "20px", marginTop: "8px",
+    marginBottom: px(20), marginTop: px(8),
   });
   header.textContent = "GPC Capacity Rating";
   el.appendChild(header);
 
   // Rating + independence row
   const ratingRow = document.createElement("div");
-  Object.assign(ratingRow.style, { display: "flex", alignItems: "baseline", gap: "16px", marginBottom: "10px" });
+  Object.assign(ratingRow.style, { display: "flex", alignItems: "baseline", gap: px(16), marginBottom: px(10) });
   const ratingEl = document.createElement("span");
-  Object.assign(ratingEl.style, { fontSize: "96px", fontWeight: "900", lineHeight: "1", color: tierColor });
+  Object.assign(ratingEl.style, { fontSize: px(96), fontWeight: "900", lineHeight: "1", color: tierColor });
   ratingEl.textContent = result.display;
   const indEl = document.createElement("span");
-  Object.assign(indEl.style, { fontSize: "36px", fontWeight: "600", color: "#8888AA" });
+  Object.assign(indEl.style, { fontSize: px(36), fontWeight: "600", color: "#8888AA" });
   indEl.textContent = `/ ${result.independence}`;
   ratingRow.appendChild(ratingEl);
   ratingRow.appendChild(indEl);
@@ -52,26 +54,26 @@ function buildBadgeElement(result: CalculationResult, gameName?: string): HTMLDi
 
   // Independence label
   const indLabel = document.createElement("p");
-  Object.assign(indLabel.style, { fontSize: "14px", color: "#55557A", marginBottom: "32px" });
+  Object.assign(indLabel.style, { fontSize: px(14), color: "#55557A", marginBottom: px(32) });
   indLabel.textContent = independenceLabel;
   el.appendChild(indLabel);
 
   // Divider
   const divider = document.createElement("div");
   divider.style.borderTop = `1px solid ${tierColor}20`;
-  divider.style.marginBottom = "16px";
+  divider.style.marginBottom = px(16);
   el.appendChild(divider);
 
   // Meta rows
   const metaWrap = document.createElement("div");
-  Object.assign(metaWrap.style, { display: "flex", flexDirection: "column", gap: "12px" });
+  Object.assign(metaWrap.style, { display: "flex", flexDirection: "column", gap: px(12) });
   for (const [label, value] of [
     ["Verification", result.verification],
     ["Version", `v${result.version}`],
     ["Score", String(result.compositeScore)],
   ] as const) {
     const row = document.createElement("div");
-    Object.assign(row.style, { display: "flex", justifyContent: "space-between", fontSize: "14px" });
+    Object.assign(row.style, { display: "flex", justifyContent: "space-between", fontSize: px(14) });
     const lEl = document.createElement("span"); lEl.style.color = "#55557A"; lEl.textContent = label;
     const vEl = document.createElement("span"); vEl.style.color = "#8888AA"; vEl.textContent = value;
     row.appendChild(lEl); row.appendChild(vEl);
@@ -82,12 +84,12 @@ function buildBadgeElement(result: CalculationResult, gameName?: string): HTMLDi
   // Footer
   const footer = document.createElement("div");
   Object.assign(footer.style, {
-    borderTop: `1px solid ${tierColor}15`, paddingTop: "20px",
+    borderTop: `1px solid ${tierColor}15`, paddingTop: px(20),
     marginTop: "auto", textAlign: "center",
   });
   const footerText = document.createElement("p");
   Object.assign(footerText.style, {
-    fontSize: "11px", color: "#55557A",
+    fontSize: px(11), color: "#55557A",
     letterSpacing: "0.12em", textTransform: "uppercase",
   });
   footerText.textContent = `${gameName ? `${gameName} · ` : ""}gpcstandard.org · Unverified self-assessment`;
