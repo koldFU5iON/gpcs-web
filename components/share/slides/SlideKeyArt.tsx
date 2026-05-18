@@ -153,6 +153,7 @@ export default function SlideKeyArt({ result, gameName, onImageReady, onStateCha
         onTouchStart={onPointerDown}
         onTouchMove={onPointerMove}
         onTouchEnd={onPointerUp}
+        onTouchCancel={onPointerUp}
       >
         {/* Repositionable image */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
