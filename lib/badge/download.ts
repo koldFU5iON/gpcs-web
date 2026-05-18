@@ -268,7 +268,8 @@ export async function downloadSquareBadge(result: CalculationResult, gameName?: 
     pointerEvents: "none",
   });
 
-  const badge = buildBadgeElement(result, gameName);
+  // 900px fills ~83% of the 1080px canvas — proportional to the on-page preview
+  const badge = buildBadgeElement(result, gameName, 900);
   badge.style.position = "relative";
   badge.style.top = "auto";
   badge.style.left = "auto";
