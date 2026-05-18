@@ -1,26 +1,33 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 
 interface RatingStartModalProps {
-  onDismiss: () => void;
+  onDismiss: (gameName: string) => void;
 }
 
 export default function RatingStartModal({ onDismiss }: RatingStartModalProps) {
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [gameName, setGameName] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const gameNameRef = useRef<string>(gameName);
+  useEffect(() => { gameNameRef.current = gameName; }, [gameName]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    buttonRef.current?.focus();
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onDismiss(); };
+    inputRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onDismiss(gameNameRef.current.trim());
+    };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
   }, [onDismiss]);
+
+  const handleDismiss = () => onDismiss(gameName.trim());
 
   return (
     <motion.div
@@ -30,7 +37,7 @@ export default function RatingStartModal({ onDismiss }: RatingStartModalProps) {
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(4px)" }}
-      onClick={(e) => { if (e.target === e.currentTarget) onDismiss(); }}
+      onClick={(e) => { if (e.target === e.currentTarget) handleDismiss(); }}
     >
       <motion.div
         initial={{ opacity: 0, y: 18, scale: 0.97 }}
@@ -63,7 +70,7 @@ export default function RatingStartModal({ onDismiss }: RatingStartModalProps) {
         </p>
 
         {/* Key points */}
-        <ul className="space-y-3 mb-7">
+        <ul className="space-y-3 mb-6">
           {[
             {
               label: "Already released?",
@@ -84,11 +91,30 @@ export default function RatingStartModal({ onDismiss }: RatingStartModalProps) {
           ))}
         </ul>
 
+        {/* Game name input */}
+        <div className="mb-6">
+          <label
+            htmlFor="game-name-input"
+            className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gpcs-muted"
+          >
+            Game name <span className="font-normal normal-case tracking-normal">(optional)</span>
+          </label>
+          <input
+            ref={inputRef}
+            id="game-name-input"
+            type="text"
+            value={gameName}
+            onChange={(e) => setGameName(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") handleDismiss(); }}
+            placeholder="e.g. Hollow Knight"
+            className="w-full rounded-lg border border-white/15 bg-white/[0.04] px-3 py-2.5 text-sm text-gpcs-text placeholder:text-gpcs-muted focus:border-gpcs-gold/40 focus:outline-none transition-colors"
+          />
+        </div>
+
         {/* CTA */}
         <button
-          ref={buttonRef}
           type="button"
-          onClick={onDismiss}
+          onClick={handleDismiss}
           className="w-full rounded-lg bg-gpcs-gold px-5 py-3 text-sm font-semibold text-gpcs-navy hover:bg-gpcs-gold-light transition-colors cursor-pointer"
         >
           Got it — start rating

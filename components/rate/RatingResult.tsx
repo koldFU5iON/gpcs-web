@@ -2,16 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { RotateCcw, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
+import { RotateCcw, Download, Share2, ChevronDown, ChevronUp } from "lucide-react";
+import { useRouter } from "next/navigation";
 import type { CalculationResult } from "@/lib/gpcs/types";
 import { TIER_HEX, TIER_DESCRIPTIONS } from "@/lib/gpcs/tiers";
 import { INDEPENDENCE_LABELS, INDEPENDENCE_DESCRIPTIONS } from "@/lib/gpcs/independence";
 import { GPCS_FALLBACK_VERSION } from "@/lib/gpcs/whitepaper";
+import { downloadBadge } from "@/lib/badge/download";
+import { type SharePayload, SHARE_STORAGE_KEY } from "@/lib/share/types";
 import RatingBadge from "./RatingBadge";
 
 interface RatingResultProps {
   result: CalculationResult;
   onReset: () => void;
+  gameName?: string;
 }
 
 function AnimatedScore({ target }: { target: number }) {
@@ -66,9 +70,26 @@ function BreakdownRow({
   );
 }
 
-export default function RatingResult({ result, onReset }: RatingResultProps) {
+export default function RatingResult({ result, onReset, gameName }: RatingResultProps) {
   const [showBreakdown, setShowBreakdown] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const router = useRouter();
   const tierColor = TIER_HEX[result.capacityTier];
+
+  const handleDownload = async () => {
+    setIsDownloading(true);
+    try {
+      await downloadBadge(result, gameName || undefined);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handleShare = () => {
+    const payload: SharePayload = { result, gameName: gameName ?? "" };
+    sessionStorage.setItem(SHARE_STORAGE_KEY, JSON.stringify(payload));
+    router.push("/share");
+  };
   const { breakdown } = result;
 
   return (
@@ -97,7 +118,7 @@ export default function RatingResult({ result, onReset }: RatingResultProps) {
           transition={{ delay: 0.4, duration: 0.4, type: "spring", stiffness: 200 }}
           className="badge-glow"
         >
-          <RatingBadge result={result} size="lg" />
+          <RatingBadge result={result} size="lg" gameName={gameName || undefined} />
         </motion.div>
       </div>
 
@@ -225,13 +246,21 @@ export default function RatingResult({ result, onReset }: RatingResultProps) {
           <RotateCcw size={16} />
           Rate another project
         </button>
-        <a
-          href="/specification"
-          className="flex items-center justify-center gap-2 rounded-lg border border-gpcs-gold/30 bg-gpcs-gold/10 px-5 py-3 text-sm font-medium text-gpcs-gold hover:bg-gpcs-gold/20 transition-colors"
+        <button
+          onClick={handleDownload}
+          disabled={isDownloading}
+          className="flex items-center justify-center gap-2 rounded-lg border border-gpcs-gold/40 bg-gpcs-gold/10 px-5 py-3 text-sm font-semibold text-gpcs-gold hover:bg-gpcs-gold/20 disabled:opacity-50 transition-colors cursor-pointer"
         >
-          <ExternalLink size={16} />
-          Read the full specification
-        </a>
+          <Download size={16} />
+          {isDownloading ? "Generating…" : "Download badge"}
+        </button>
+        <button
+          onClick={handleShare}
+          className="flex items-center justify-center gap-2 rounded-lg bg-gpcs-gold px-5 py-3 text-sm font-semibold text-gpcs-navy hover:bg-gpcs-gold-light transition-colors cursor-pointer"
+        >
+          <Share2 size={16} />
+          Share
+        </button>
       </div>
     </motion.div>
   );
