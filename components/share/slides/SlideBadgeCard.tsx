@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Download } from "lucide-react";
 import type { CalculationResult } from "@/lib/gpcs/types";
 import { TIER_HEX } from "@/lib/gpcs/tiers";
 import RatingBadge from "@/components/rate/RatingBadge";
-import { downloadSquareBadge } from "@/lib/badge/download";
 
 interface SlideBadgeCardProps {
   result: CalculationResult;
@@ -14,12 +13,24 @@ interface SlideBadgeCardProps {
 
 export default function SlideBadgeCard({ result, gameName }: SlideBadgeCardProps) {
   const [isDownloading, setIsDownloading] = useState(false);
+  const badgeRef = useRef<HTMLDivElement>(null);
   const tierColor = TIER_HEX[result.capacityTier];
 
   const handleDownload = async () => {
+    if (!badgeRef.current) return;
     setIsDownloading(true);
     try {
-      await downloadSquareBadge(result, gameName);
+      const { toPng } = await import("html-to-image");
+      const dataUrl = await toPng(badgeRef.current, { pixelRatio: 2 });
+      const slug = gameName
+        ? gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+        : null;
+      const link = document.createElement("a");
+      link.download = slug ? `gpcs-card-${slug}.png` : "gpcs-card.png";
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } finally {
       setIsDownloading(false);
     }
@@ -27,18 +38,20 @@ export default function SlideBadgeCard({ result, gameName }: SlideBadgeCardProps
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Square preview */}
+      {/* Preview — ref wraps only the badge so snapshot excludes the container bg */}
       <div
-        className="w-full rounded-lg overflow-hidden flex items-center justify-center"
-        style={{ aspectRatio: "1 / 1", background: "#0A0A0F", border: `1px solid ${tierColor}20` }}
+        className="w-full rounded-lg flex items-center justify-center py-8"
+        style={{ background: "#0A0A0F", border: `1px solid ${tierColor}15` }}
       >
-        <RatingBadge result={result} size="lg" gameName={gameName} />
+        <div ref={badgeRef}>
+          <RatingBadge result={result} size="lg" gameName={gameName} />
+        </div>
       </div>
 
       {/* Slide label */}
       <div className="flex items-center justify-between text-xs text-gpcs-muted">
         <span className="font-semibold text-gpcs-silver">Slide 2 — Rating card</span>
-        <span>1080 × 1080px</span>
+        <span>2× PNG</span>
       </div>
 
       {/* Download button */}
