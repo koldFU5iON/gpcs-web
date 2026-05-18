@@ -11,19 +11,21 @@ interface RatingStartModalProps {
 export default function RatingStartModal({ onDismiss }: RatingStartModalProps) {
   const [gameName, setGameName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const gameNameRef = useRef<string>(gameName);
+  useEffect(() => { gameNameRef.current = gameName; }, [gameName]);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
     inputRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onDismiss(gameName.trim());
+      if (e.key === "Escape") onDismiss(gameNameRef.current.trim());
     };
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
-  }, [onDismiss, gameName]);
+  }, [onDismiss]);
 
   const handleDismiss = () => onDismiss(gameName.trim());
 
