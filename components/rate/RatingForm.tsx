@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import type { FormAnswers, CalculationResult } from "@/lib/gpcs/types";
 import { defaultFormAnswers } from "@/lib/gpcs/types";
 import { calculateRating } from "@/lib/gpcs/scoring";
@@ -10,6 +10,7 @@ import StudioStep from "./steps/StudioStep";
 import PublisherStep from "./steps/PublisherStep";
 import OtherStep from "./steps/OtherStep";
 import RatingResult from "./RatingResult";
+import RatingStartModal from "./RatingStartModal";
 
 const STEPS = [
   { id: "studio", label: "Your Studio", description: "Team size, infrastructure, track record" },
@@ -44,6 +45,7 @@ function isOtherStepComplete(answers: FormAnswers): boolean {
 }
 
 export default function RatingForm() {
+  const [showModal, setShowModal] = useState(true);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<FormAnswers>(defaultFormAnswers);
   const [result, setResult] = useState<CalculationResult | null>(null);
@@ -86,7 +88,22 @@ export default function RatingForm() {
   }
 
   return (
+    <>
+    {showModal && <RatingStartModal onDismiss={() => setShowModal(false)} />}
     <div className="mx-auto max-w-2xl">
+      {/* Temporal anchor instruction */}
+      <div className="mb-6 flex gap-3 rounded-lg border border-white/15 bg-white/[0.04] p-4">
+        <Clock size={15} className="mt-0.5 shrink-0 text-gpcs-silver" />
+        <div>
+          <p className="mb-0.5 text-sm font-semibold text-gpcs-text">Before you begin</p>
+          <p className="text-xs leading-relaxed text-gpcs-silver">
+            If you are rating a game that has already been released, answer every question as it
+            was true at the time of that game&apos;s 1.0 release — not today. If you are rating a
+            new or unreleased project, answer as of today.
+          </p>
+        </div>
+      </div>
+
       {/* Progress bar */}
       <div className="mb-8">
         <div className="mb-4 flex items-center justify-between">
@@ -176,5 +193,6 @@ export default function RatingForm() {
         </button>
       </div>
     </div>
+    </>
   );
 }

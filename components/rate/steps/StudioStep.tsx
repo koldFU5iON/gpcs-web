@@ -18,18 +18,23 @@ interface OptionCard<T> {
 
 function RadioCardGroup<T extends string>({
   question,
+  hint,
   options,
   value,
   onChange,
 }: {
   question: string;
+  hint?: string;
   options: OptionCard<T>[];
   value: T | null;
   onChange: (v: T) => void;
 }) {
   return (
     <div className="mb-6">
-      <p className="mb-3 text-sm font-semibold text-gpcs-text">{question}</p>
+      <p className="mb-1 text-sm font-semibold text-gpcs-text">{question}</p>
+      {hint && (
+        <p className="mb-3 text-xs italic text-gpcs-muted">{hint}</p>
+      )}
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {options.map((opt) => (
           <button
@@ -114,6 +119,7 @@ export default function StudioStep({ answers, onChange }: StudioStepProps) {
 
       <RadioCardGroup
         question="Q1. How large is the team working on this project?"
+        hint="For released games: count only people who were on the project at 1.0 release, not today's headcount."
         options={teamSizeOptions}
         value={answers.q1_teamSize}
         onChange={(v) => onChange({ q1_teamSize: v })}
@@ -128,6 +134,7 @@ export default function StudioStep({ answers, onChange }: StudioStepProps) {
 
       <RadioCardGroup
         question="Q3. What is the studio's shipping track record?"
+        hint="For released games: count only titles shipped before this game's 1.0 release date — not subsequent releases."
         options={trackRecordOptions}
         value={answers.q3_trackRecord}
         onChange={(v) => onChange({ q3_trackRecord: v })}
@@ -142,6 +149,7 @@ export default function StudioStep({ answers, onChange }: StudioStepProps) {
 
       <RadioCardGroup
         question="Q5. What is the studio's geographic footprint?"
+        hint="For released games: reflect your office structure as it existed at the time of this game's release."
         options={geographicOptions}
         value={answers.q5_geographicFootprint}
         onChange={(v) => onChange({ q5_geographicFootprint: v })}
