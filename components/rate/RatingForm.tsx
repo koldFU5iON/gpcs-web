@@ -46,6 +46,7 @@ function isOtherStepComplete(answers: FormAnswers): boolean {
 
 export default function RatingForm() {
   const [showModal, setShowModal] = useState(true);
+  const [gameName, setGameName] = useState("");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<FormAnswers>(defaultFormAnswers);
   const [result, setResult] = useState<CalculationResult | null>(null);
@@ -84,12 +85,19 @@ export default function RatingForm() {
   };
 
   if (result) {
-    return <RatingResult result={result} onReset={reset} />;
+    return <RatingResult result={result} onReset={reset} gameName={gameName} />;
   }
 
   return (
     <>
-    {showModal && <RatingStartModal onDismiss={() => setShowModal(false)} />}
+    {showModal && (
+      <RatingStartModal
+        onDismiss={(name) => {
+          setGameName(name);
+          setShowModal(false);
+        }}
+      />
+    )}
     <div className="mx-auto max-w-2xl">
       {/* Temporal anchor instruction */}
       <div className="mb-6 flex gap-3 rounded-lg border border-white/15 bg-white/[0.04] p-4">
@@ -160,7 +168,7 @@ export default function RatingForm() {
           exit={{ opacity: 0, x: direction * -30 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
         >
-          {step === 0 && <StudioStep answers={answers} onChange={updateAnswers} />}
+          {step === 0 && <StudioStep answers={answers} onChange={updateAnswers} gameName={gameName} />}
           {step === 1 && <PublisherStep answers={answers} onChange={updateAnswers} />}
           {step === 2 && <OtherStep answers={answers} onChange={updateAnswers} />}
         </motion.div>
