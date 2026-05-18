@@ -19,7 +19,7 @@ function buildBadgeElement(result: CalculationResult, gameName?: string, width =
   const el = document.createElement("div");
   Object.assign(el.style, {
     position: "fixed", top: "0", left: "0", zIndex: "99999",
-    pointerEvents: "none", width: `${width}px`, height: px(500),
+    pointerEvents: "none", width: `${width}px`, height: px(400),
     fontFamily: "'Courier New', Courier, monospace",
     background: "#131320", border: `1px solid ${tierColor}40`,
     borderRadius: px(12),
@@ -117,7 +117,7 @@ export async function downloadBadge(result: CalculationResult, gameName?: string
   await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
 
   try {
-    const dataUrl = await toPng(el, { pixelRatio: 2, width: 560, height: 500 });
+    const dataUrl = await toPng(el, { pixelRatio: 2, width: 560, height: 400 });
 
     const slug = gameName
       ? gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")

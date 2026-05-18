@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Download, Upload } from "lucide-react";
 import type { CalculationResult } from "@/lib/gpcs/types";
-import RatingBadge from "@/components/rate/RatingBadge";
+import { TIER_HEX } from "@/lib/gpcs/tiers";
 import { downloadKeyArtOverlay, type KeyArtState } from "@/lib/badge/download";
 
 interface SlideKeyArtProps {
@@ -19,6 +19,7 @@ const PREVIEW_H = 315;
 const clamp = (val: number, min: number, max: number) => Math.max(min, Math.min(max, val));
 
 export default function SlideKeyArt({ result, gameName, onImageReady, onStateChange }: SlideKeyArtProps) {
+  const tierColor = TIER_HEX[result.capacityTier];
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [scaledImgW, setScaledImgW] = useState(0);
   const [scaledImgH, setScaledImgH] = useState(0);
@@ -180,9 +181,26 @@ export default function SlideKeyArt({ result, gameName, onImageReady, onStateCha
           </div>
         )}
 
-        {/* Badge preview at ~33% width — bottom-left */}
-        <div className="absolute bottom-2 left-2 pointer-events-none" style={{ width: "33%" }}>
-          <RatingBadge result={result} size="sm" gameName={gameName} />
+        {/* Compact badge stamp preview — solid dark background, always fits */}
+        <div
+          className="absolute bottom-2 left-2 pointer-events-none"
+          style={{
+            width: "30%", maxWidth: "160px",
+            background: "#131320",
+            border: `1px solid ${tierColor}50`,
+            borderRadius: "4px",
+            padding: "6px 8px",
+            fontFamily: "'Courier New', Courier, monospace",
+            overflow: "hidden",
+            position: "absolute",
+          }}
+        >
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, ${tierColor}60, ${tierColor}CC, ${tierColor}60)` }} />
+          <div style={{ fontSize: "7px", color: "#55557A", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "5px", marginBottom: "2px" }}>GPC Rating</div>
+          <div style={{ fontSize: "20px", fontWeight: 900, lineHeight: 1, color: tierColor }}>{result.display}</div>
+          <div style={{ fontSize: "6px", color: "#55557A", marginTop: "4px", letterSpacing: "0.07em", textTransform: "uppercase" }}>
+            {gameName ? `${gameName} · ` : ""}gpcstandard.org
+          </div>
         </div>
 
         {/* Change image */}
