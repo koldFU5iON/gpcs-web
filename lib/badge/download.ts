@@ -1,6 +1,6 @@
 export async function downloadBadge(element: HTMLElement, gameName?: string): Promise<void> {
   const { toPng } = await import("html-to-image");
-  const dataUrl = await toPng(element, { pixelRatio: 2 });
+  const dataUrl = await toPng(element, { pixelRatio: 2, width: 560, height: 700 });
 
   const slug = gameName
     ? gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
