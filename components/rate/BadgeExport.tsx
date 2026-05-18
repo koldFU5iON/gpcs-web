@@ -21,7 +21,8 @@ const BadgeExport = forwardRef<HTMLDivElement, BadgeExportProps>(
         style={{
           position: "fixed",
           top: 0,
-          left: "-9999px",
+          left: 0,
+          zIndex: -9999,
           pointerEvents: "none",
           width: "560px",
           height: "700px",
