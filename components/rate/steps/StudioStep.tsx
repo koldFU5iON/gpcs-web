@@ -104,9 +104,11 @@ const geographicOptions: OptionCard<GeographicFootprint>[] = [
 interface StudioStepProps {
   answers: FormAnswers;
   onChange: (updates: Partial<FormAnswers>) => void;
+  gameName?: string;
 }
 
-export default function StudioStep({ answers, onChange }: StudioStepProps) {
+export default function StudioStep({ answers, onChange, gameName }: StudioStepProps) {
+  const project = gameName || "your game project";
   return (
     <div>
       <h2 className="mb-1 font-display text-xl font-semibold text-gpcs-text">
@@ -118,7 +120,7 @@ export default function StudioStep({ answers, onChange }: StudioStepProps) {
       </p>
 
       <RadioCardGroup
-        question="Q1. How large is the team working on this project?"
+        question={`Q1. How large is the team working on ${project}?`}
         hint="For released games: count only people who were on the project at 1.0 release, not today's headcount."
         options={teamSizeOptions}
         value={answers.q1_teamSize}
@@ -133,7 +135,7 @@ export default function StudioStep({ answers, onChange }: StudioStepProps) {
       />
 
       <RadioCardGroup
-        question="Q3. What is the studio's shipping track record?"
+        question={`Q3. What is the studio's shipping track record for ${project}?`}
         hint="For released games: count only titles shipped before this game's 1.0 release date — not subsequent releases."
         options={trackRecordOptions}
         value={answers.q3_trackRecord}
@@ -148,7 +150,7 @@ export default function StudioStep({ answers, onChange }: StudioStepProps) {
       />
 
       <RadioCardGroup
-        question="Q5. What is the studio's geographic footprint?"
+        question={`Q5. What is the studio's geographic footprint for ${project}?`}
         hint="For released games: reflect your office structure as it existed at the time of this game's release."
         options={geographicOptions}
         value={answers.q5_geographicFootprint}
