@@ -330,14 +330,14 @@ export default async function AboutPage() {
         </Link>
       </section>
 
-      {/* Support this project */}
+      {/* Tip / support this project */}
       <section className="mb-8 rounded-xl border border-gpcs-gold/20 bg-gpcs-gold/5 p-8">
         <h2 className="font-display text-2xl font-bold text-gpcs-text mb-2">
-          Support This Project
+          Leave a Tip
         </h2>
         <p className="text-sm text-gpcs-silver mb-6 max-w-xl">
           GPCS is a solo, open-source initiative. A GitHub star signals industry interest and helps
-          the standard gain visibility. If you find this work valuable, a Ko-fi helps sustain it.
+          the standard gain visibility. If you find this work valuable, a tip goes a long way.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <a

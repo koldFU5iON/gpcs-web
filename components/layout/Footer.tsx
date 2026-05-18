@@ -89,7 +89,7 @@ export default function Footer({ version }: { version: string }) {
                 className="inline-flex items-center gap-2 text-sm text-gpcs-silver hover:text-gpcs-gold transition-colors"
               >
                 <Coffee size={14} />
-                Support on Ko-fi
+                Tip on Ko-fi
               </a>
               <a
                 href="https://github.com/koldfu5ion/gpcs"
