@@ -135,6 +135,75 @@ export async function downloadBadge(result: CalculationResult, gameName?: string
   }
 }
 
+// Simplified stamp for key art overlays — just the cert, no meta rows
+function buildBadgeSeal(result: CalculationResult, width = 360): HTMLDivElement {
+  const tierColor = TIER_HEX[result.capacityTier];
+  const s = width / 360;
+  const px = (n: number) => `${Math.round(n * s)}px`;
+
+  const el = document.createElement("div");
+  Object.assign(el.style, {
+    position: "fixed", top: "0", left: "0", zIndex: "99999",
+    pointerEvents: "none", width: `${width}px`, height: px(190),
+    fontFamily: "'Courier New', Courier, monospace",
+    background: "#131320", border: `1px solid ${tierColor}55`,
+    borderRadius: px(8),
+    boxShadow: `0 0 ${px(40)} ${tierColor}25`,
+    padding: `${px(18)} ${px(22)}`, boxSizing: "border-box", overflow: "hidden",
+    display: "flex", flexDirection: "column", justifyContent: "space-between",
+  });
+
+  // Top colour strip
+  const strip = document.createElement("div");
+  Object.assign(strip.style, {
+    position: "absolute", top: "0", left: "0", right: "0", height: px(3),
+    background: `linear-gradient(90deg, ${tierColor}60, ${tierColor}CC, ${tierColor}60)`,
+    borderRadius: `${px(8)} ${px(8)} 0 0`,
+  });
+  el.appendChild(strip);
+
+  // "GPC" header
+  const header = document.createElement("p");
+  Object.assign(header.style, {
+    fontSize: px(10), fontWeight: "700", letterSpacing: "0.3em",
+    textTransform: "uppercase", color: "#55557A", marginTop: px(4),
+  });
+  header.textContent = "GPC";
+  el.appendChild(header);
+
+  // Rating: BB+ / I0
+  const ratingRow = document.createElement("div");
+  Object.assign(ratingRow.style, { display: "flex", alignItems: "baseline", gap: px(8) });
+
+  const ratingEl = document.createElement("span");
+  Object.assign(ratingEl.style, { fontSize: px(78), fontWeight: "900", lineHeight: "1", color: tierColor });
+  ratingEl.textContent = result.display;
+
+  const sepEl = document.createElement("span");
+  Object.assign(sepEl.style, { fontSize: px(28), fontWeight: "400", color: "#55557A" });
+  sepEl.textContent = "/";
+
+  const indEl = document.createElement("span");
+  Object.assign(indEl.style, { fontSize: px(28), fontWeight: "700", color: "#8888AA" });
+  indEl.textContent = result.independence;
+
+  ratingRow.appendChild(ratingEl);
+  ratingRow.appendChild(sepEl);
+  ratingRow.appendChild(indEl);
+  el.appendChild(ratingRow);
+
+  // URL footer
+  const footer = document.createElement("p");
+  Object.assign(footer.style, {
+    fontSize: px(10), color: "#55557A",
+    letterSpacing: "0.15em", textTransform: "uppercase",
+  });
+  footer.textContent = "gpcstandard.org";
+  el.appendChild(footer);
+
+  return el;
+}
+
 export async function downloadKeyArtOverlay(
   state: KeyArtState,
   result: CalculationResult,
@@ -162,8 +231,8 @@ export async function downloadKeyArtOverlay(
   });
   container.appendChild(img);
 
-  // Badge layer at 400px wide, bottom-left with 32px margin
-  const badge = buildBadgeElement(result, gameName, 400);
+  // Seal stamp — bottom-left with 32px margin
+  const badge = buildBadgeSeal(result, 360);
   badge.style.position = "absolute";
   badge.style.top = "auto";
   badge.style.bottom = "32px";

@@ -181,26 +181,29 @@ export default function SlideKeyArt({ result, gameName, onImageReady, onStateCha
           </div>
         )}
 
-        {/* Compact badge stamp preview — solid dark background, always fits */}
+        {/* Seal preview — mirrors the downloaded stamp */}
         <div
           className="absolute bottom-2 left-2 pointer-events-none"
           style={{
             width: "30%", maxWidth: "160px",
             background: "#131320",
-            border: `1px solid ${tierColor}50`,
+            border: `1px solid ${tierColor}55`,
             borderRadius: "4px",
             padding: "6px 8px",
             fontFamily: "'Courier New', Courier, monospace",
             overflow: "hidden",
-            position: "absolute",
+            display: "flex", flexDirection: "column", justifyContent: "space-between",
+            gap: "3px",
           }}
         >
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, ${tierColor}60, ${tierColor}CC, ${tierColor}60)` }} />
-          <div style={{ fontSize: "7px", color: "#55557A", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "5px", marginBottom: "2px" }}>GPC Rating</div>
-          <div style={{ fontSize: "20px", fontWeight: 900, lineHeight: 1, color: tierColor }}>{result.display}</div>
-          <div style={{ fontSize: "6px", color: "#55557A", marginTop: "4px", letterSpacing: "0.07em", textTransform: "uppercase" }}>
-            {gameName ? `${gameName} · ` : ""}gpcstandard.org
+          <div style={{ fontSize: "6px", color: "#55557A", textTransform: "uppercase", letterSpacing: "0.2em", marginTop: "5px" }}>GPC</div>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
+            <span style={{ fontSize: "18px", fontWeight: 900, lineHeight: 1, color: tierColor }}>{result.display}</span>
+            <span style={{ fontSize: "8px", color: "#55557A" }}>/</span>
+            <span style={{ fontSize: "8px", fontWeight: 700, color: "#8888AA" }}>{result.independence}</span>
           </div>
+          <div style={{ fontSize: "6px", color: "#55557A", letterSpacing: "0.1em", textTransform: "uppercase" }}>gpcstandard.org</div>
         </div>
 
         {/* Change image */}
