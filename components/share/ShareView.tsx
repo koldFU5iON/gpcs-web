@@ -79,7 +79,8 @@ export default function ShareView() {
         <button
           onClick={handleDownload}
           disabled={isDownloading}
-          className="flex items-center justify-center gap-2 rounded-lg border border-gpcs-gold/40 bg-gpcs-gold/10 px-5 py-3 text-sm font-semibold text-gpcs-gold hover:bg-gpcs-gold/20 disabled:opacity-50 transition-colors cursor-pointer"
+          aria-busy={isDownloading}
+          className="flex items-center justify-center gap-2 rounded-lg border border-gpcs-gold/40 bg-gpcs-gold/10 px-5 py-3 text-sm font-semibold text-gpcs-gold hover:bg-gpcs-gold/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
         >
           <Download size={16} />
           {isDownloading ? "Generating…" : "Download badge"}
