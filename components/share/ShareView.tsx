@@ -1,17 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Download, RotateCcw, Twitter, Linkedin } from "lucide-react";
 import type { SharePayload } from "@/lib/share/types";
 import { SHARE_STORAGE_KEY } from "@/lib/share/types";
 import RatingBadge from "@/components/rate/RatingBadge";
-import BadgeExport from "@/components/rate/BadgeExport";
 import { downloadBadge } from "@/lib/badge/download";
 
 export default function ShareView() {
   const [payload, setPayload] = useState<SharePayload | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  const badgeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const raw = sessionStorage.getItem(SHARE_STORAGE_KEY);
@@ -47,10 +45,9 @@ export default function ShareView() {
   const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://gpcstandard.org/rate")}`;
 
   const handleDownload = async () => {
-    if (!badgeRef.current) return;
     setIsDownloading(true);
     try {
-      await downloadBadge(badgeRef.current, displayName);
+      await downloadBadge(result, displayName);
     } finally {
       setIsDownloading(false);
     }
@@ -58,9 +55,6 @@ export default function ShareView() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
-      {/* Off-screen export node */}
-      <BadgeExport ref={badgeRef} result={result} gameName={displayName} />
-
       {/* Heading */}
       <div className="mb-8 text-center">
         <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gpcs-muted">

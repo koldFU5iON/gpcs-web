@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { RotateCcw, Download, Share2, ChevronDown, ChevronUp } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,6 @@ import { GPCS_FALLBACK_VERSION } from "@/lib/gpcs/whitepaper";
 import { downloadBadge } from "@/lib/badge/download";
 import { type SharePayload, SHARE_STORAGE_KEY } from "@/lib/share/types";
 import RatingBadge from "./RatingBadge";
-import BadgeExport from "./BadgeExport";
 
 interface RatingResultProps {
   result: CalculationResult;
@@ -74,15 +73,13 @@ function BreakdownRow({
 export default function RatingResult({ result, onReset, gameName }: RatingResultProps) {
   const [showBreakdown, setShowBreakdown] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const badgeRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const tierColor = TIER_HEX[result.capacityTier];
 
   const handleDownload = async () => {
-    if (!badgeRef.current) return;
     setIsDownloading(true);
     try {
-      await downloadBadge(badgeRef.current, gameName || undefined);
+      await downloadBadge(result, gameName || undefined);
     } finally {
       setIsDownloading(false);
     }
@@ -96,8 +93,6 @@ export default function RatingResult({ result, onReset, gameName }: RatingResult
   const { breakdown } = result;
 
   return (
-    <>
-    <BadgeExport ref={badgeRef} result={result} gameName={gameName || undefined} />
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -268,6 +263,5 @@ export default function RatingResult({ result, onReset, gameName }: RatingResult
         </button>
       </div>
     </motion.div>
-    </>
   );
 }

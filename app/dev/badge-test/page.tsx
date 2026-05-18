@@ -37,14 +37,10 @@ export default function BadgeTestPage() {
   const tierColor = "#00C8FF";
 
   const handleDownload = async () => {
-    if (!captureRef.current) {
-      setStatus("❌ ref is null — element not mounted");
-      return;
-    }
     setStatus("⏳ Capturing…");
     setIsDownloading(true);
     try {
-      await downloadBadge(captureRef.current, MOCK_GAME);
+      await downloadBadge(MOCK_RESULT, MOCK_GAME);
       setStatus("✅ Download triggered — check your downloads folder");
     } catch (e) {
       setStatus(`❌ Error: ${String(e)}`);
