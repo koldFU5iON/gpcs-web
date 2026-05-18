@@ -122,7 +122,7 @@ const BadgeExport = forwardRef<HTMLDivElement, BadgeExportProps>(
               textTransform: "uppercase",
             }}
           >
-            {gameName ? `${gameName} · ` : ""}gpcstandard.org · Rate your game
+            {gameName ? `${gameName} · ` : ""}gpcstandard.org · Unverified self-assessment
           </p>
         </div>
       </div>

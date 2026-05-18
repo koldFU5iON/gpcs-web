@@ -135,7 +135,7 @@ export default function StudioStep({ answers, onChange, gameName }: StudioStepPr
       />
 
       <RadioCardGroup
-        question={`Q3. What is the studio's shipping track record for ${project}?`}
+        question={`Q3. What was the studio's shipping track record at the time of ${project}?`}
         hint="For released games: count only titles shipped before this game's 1.0 release date — not subsequent releases."
         options={trackRecordOptions}
         value={answers.q3_trackRecord}
