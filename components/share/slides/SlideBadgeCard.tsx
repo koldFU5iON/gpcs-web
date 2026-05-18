@@ -21,7 +21,9 @@ export default function SlideBadgeCard({ result, gameName }: SlideBadgeCardProps
     setIsDownloading(true);
     try {
       const { toPng } = await import("html-to-image");
-      const dataUrl = await toPng(badgeRef.current, { pixelRatio: 2 });
+      // bg-gpcs-slate/80 is semi-transparent; composite against the page bg so
+      // it renders identically to how it looks on screen
+      const dataUrl = await toPng(badgeRef.current, { pixelRatio: 2, backgroundColor: "#0A0A0F" });
       const slug = gameName
         ? gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
         : null;
