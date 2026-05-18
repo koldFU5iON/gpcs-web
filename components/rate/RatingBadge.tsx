@@ -7,12 +7,14 @@ interface RatingBadgeProps {
   result: CalculationResult;
   size?: "sm" | "md" | "lg";
   className?: string;
+  gameName?: string;
 }
 
 export default function RatingBadge({
   result,
   size = "md",
   className,
+  gameName,
 }: RatingBadgeProps) {
   const tierColor = TIER_HEX[result.capacityTier];
   const independenceLabel = INDEPENDENCE_LABELS[result.independence];
@@ -94,7 +96,7 @@ export default function RatingBadge({
       {/* Footer */}
       <div className="mt-4 border-t pt-3" style={{ borderColor: `${tierColor}15` }}>
         <p className="text-[10px] text-gpcs-muted text-center uppercase tracking-wider">
-          gpcstandard.org &bull; Unverified self-assessment
+          {gameName ? `${gameName} · ` : ""}gpcstandard.org &bull; Unverified self-assessment
         </p>
       </div>
     </div>
