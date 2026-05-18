@@ -1,24 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Download } from "lucide-react";
 import type { CalculationResult } from "@/lib/gpcs/types";
 import { downloadKeyArtOverlay, downloadSquareBadge, type KeyArtState } from "@/lib/badge/download";
 import SlideKeyArt from "./slides/SlideKeyArt";
 import SlideBadgeCard from "./slides/SlideBadgeCard";
 
+type FileGenerator = () => Promise<File | null>;
+
 interface KeyArtCarouselProps {
   result: CalculationResult;
   gameName?: string;
+  onFilesAvailable?: (getFiles: () => Promise<File[]>) => void;
 }
 
 const TOTAL_SLIDES = 2;
 
-export default function KeyArtCarousel({ result, gameName }: KeyArtCarouselProps) {
+export default function KeyArtCarousel({ result, gameName, onFilesAvailable }: KeyArtCarouselProps) {
   const [activeSlide, setActiveSlide] = useState(1); // start on slide 2 (always available)
   const [keyArtReady, setKeyArtReady] = useState(false);
   const [keyArtState, setKeyArtState] = useState<KeyArtState | null>(null);
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
+
+  // Slide-provided file generators, collected via callback. Refs not state
+  // so updates don't trigger carousel re-renders.
+  const keyArtGenRef = useRef<FileGenerator | null>(null);
+  const badgeGenRef = useRef<FileGenerator | null>(null);
+
+  // Expose aggregated getFiles() to parent (ShareView) once on mount —
+  // the ref-based generators stay live across re-renders.
+  useEffect(() => {
+    if (!onFilesAvailable) return;
+    onFilesAvailable(async () => {
+      const files: File[] = [];
+      if (keyArtGenRef.current) {
+        const f = await keyArtGenRef.current();
+        if (f) files.push(f);
+      }
+      if (badgeGenRef.current) {
+        const f = await badgeGenRef.current();
+        if (f) files.push(f);
+      }
+      return files;
+    });
+  }, [onFilesAvailable]);
 
   const handleDownloadAll = async () => {
     setIsDownloadingAll(true);
@@ -82,10 +108,15 @@ export default function KeyArtCarousel({ result, gameName }: KeyArtCarouselProps
               gameName={gameName}
               onImageReady={setKeyArtReady}
               onStateChange={setKeyArtState}
+              onGenerator={(gen) => { keyArtGenRef.current = gen; }}
             />
           </div>
           <div style={{ display: activeSlide === 1 ? "block" : "none" }}>
-            <SlideBadgeCard result={result} gameName={gameName} />
+            <SlideBadgeCard
+              result={result}
+              gameName={gameName}
+              onGenerator={(gen) => { badgeGenRef.current = gen; }}
+            />
           </div>
         </div>
 

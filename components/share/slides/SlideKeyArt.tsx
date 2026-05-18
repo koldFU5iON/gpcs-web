@@ -1,16 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Upload } from "lucide-react";
 import type { CalculationResult } from "@/lib/gpcs/types";
 import { TIER_HEX } from "@/lib/gpcs/tiers";
-import { downloadKeyArtOverlay, type KeyArtState } from "@/lib/badge/download";
+import {
+  downloadKeyArtOverlay,
+  generateKeyArtOverlayFile,
+  type KeyArtState,
+} from "@/lib/badge/download";
+
+type FileGenerator = () => Promise<File | null>;
 
 interface SlideKeyArtProps {
   result: CalculationResult;
   gameName?: string;
   onImageReady: (ready: boolean) => void;
   onStateChange: (state: KeyArtState | null) => void;
+  onGenerator?: (gen: FileGenerator | null) => void;
 }
 
 const PREVIEW_W = 600;
@@ -18,7 +25,7 @@ const PREVIEW_H = 315;
 
 const clamp = (val: number, min: number, max: number) => Math.max(min, Math.min(max, val));
 
-export default function SlideKeyArt({ result, gameName, onImageReady, onStateChange }: SlideKeyArtProps) {
+export default function SlideKeyArt({ result, gameName, onImageReady, onStateChange, onGenerator }: SlideKeyArtProps) {
   const tierColor = TIER_HEX[result.capacityTier];
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [scaledImgW, setScaledImgW] = useState(0);
@@ -39,6 +46,20 @@ export default function SlideKeyArt({ result, gameName, onImageReady, onStateCha
       onStateChange(null);
     }
   }, [imageDataUrl, panX, panY, scaledImgW, scaledImgH, onStateChange]);
+
+  const generateFile = useCallback(async (): Promise<File | null> => {
+    if (!imageDataUrl) return null;
+    return generateKeyArtOverlayFile(
+      { imageDataUrl, panX, panY, scaledImgW, scaledImgH },
+      result,
+      gameName,
+    );
+  }, [imageDataUrl, panX, panY, scaledImgW, scaledImgH, result, gameName]);
+
+  useEffect(() => {
+    if (!onGenerator) return;
+    onGenerator(imageDataUrl ? generateFile : null);
+  }, [imageDataUrl, generateFile, onGenerator]);
 
   const loadImage = (dataUrl: string) => {
     const img = new Image();

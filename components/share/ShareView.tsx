@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RotateCcw, Twitter, Linkedin } from "lucide-react";
 import type { SharePayload } from "@/lib/share/types";
 import { SHARE_STORAGE_KEY } from "@/lib/share/types";
 import RatingBadge from "@/components/rate/RatingBadge";
 import KeyArtCarousel from "./KeyArtCarousel";
+import { canShareFiles, shareWithFiles } from "@/lib/badge/share";
 
 export default function ShareView() {
   const [payload, setPayload] = useState<SharePayload | null>(null);
+  const getFilesRef = useRef<(() => Promise<File[]>) | null>(null);
 
   useEffect(() => {
     const raw = sessionStorage.getItem(SHARE_STORAGE_KEY);
@@ -37,11 +39,28 @@ export default function ShareView() {
   const displayName = gameName || undefined;
   const title = gameName ? `${gameName}'s GPCS Rating` : "Your GPCS Rating";
 
-  const tweetText = encodeURIComponent(
-    `${gameName || "My game"} received a GPCS ${result.display} rating — a structured classification of project scale and resource backing. Rate your own game at gpcstandard.org/rate`
-  );
-  const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
-  const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://gpcstandard.org/rate")}`;
+  const shareText = `${gameName || "My game"} received a GPCS ${result.display} rating — a structured classification of project scale and resource backing.`;
+  const shareUrl = "https://gpcstandard.org/rate";
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`${shareText} Rate your own game at gpcstandard.org/rate`)}`;
+  const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+
+  // Tries Web Share API with image files first; falls back to opening
+  // the platform's URL intent (text-only share) if unsupported or aborted.
+  const handleShare = async (e: React.MouseEvent<HTMLAnchorElement>, fallbackUrl: string) => {
+    e.preventDefault();
+    if (getFilesRef.current) {
+      try {
+        const files = await getFilesRef.current();
+        if (files.length > 0 && canShareFiles(files)) {
+          const shared = await shareWithFiles({ files, text: shareText, url: shareUrl });
+          if (shared) return;
+        }
+      } catch {
+        // fall through to URL intent
+      }
+    }
+    window.open(fallbackUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
@@ -59,7 +78,11 @@ export default function ShareView() {
       </div>
 
       {/* Social pack carousel */}
-      <KeyArtCarousel result={result} gameName={displayName} />
+      <KeyArtCarousel
+        result={result}
+        gameName={displayName}
+        onFilesAvailable={(fn) => { getFilesRef.current = fn; }}
+      />
 
       {/* Actions */}
       <div className="flex flex-col gap-3">
@@ -67,6 +90,7 @@ export default function ShareView() {
           href={tweetUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => handleShare(e, tweetUrl)}
           className="flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-medium text-gpcs-silver hover:border-white/25 transition-colors"
         >
           <Twitter size={16} />
@@ -77,6 +101,7 @@ export default function ShareView() {
           href={linkedInUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => handleShare(e, linkedInUrl)}
           className="flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-medium text-gpcs-silver hover:border-white/25 transition-colors"
         >
           <Linkedin size={16} />

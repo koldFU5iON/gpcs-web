@@ -1,6 +1,23 @@
 import type { CalculationResult } from "@/lib/gpcs/types";
 import { TIER_HEX } from "@/lib/gpcs/tiers";
 import { INDEPENDENCE_LABELS } from "@/lib/gpcs/independence";
+import { dataUrlToFile } from "./share";
+
+function keyArtFilename(gameName?: string): string {
+  const slug = gameName
+    ? gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+    : null;
+  return slug ? `gpcs-keyart-${slug}.png` : "gpcs-keyart.png";
+}
+
+function triggerDownload(dataUrl: string, filename: string): void {
+  const link = document.createElement("a");
+  link.download = filename;
+  link.href = dataUrl;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 
 export interface KeyArtState {
   imageDataUrl: string;
@@ -204,11 +221,10 @@ function buildBadgeSeal(result: CalculationResult, width = 360): HTMLDivElement 
   return el;
 }
 
-export async function downloadKeyArtOverlay(
+async function captureKeyArtOverlay(
   state: KeyArtState,
   result: CalculationResult,
-  gameName?: string,
-): Promise<void> {
+): Promise<string> {
   const { toPng } = await import("html-to-image");
   const RATIO = 2; // preview is 600px wide, output is 1200px
 
@@ -244,15 +260,28 @@ export async function downloadKeyArtOverlay(
   await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
 
   try {
-    const dataUrl = await toPng(container, { pixelRatio: 1, width: 1200, height: 630 });
-    const slug = gameName ? gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") : null;
-    const filename = slug ? `gpcs-keyart-${slug}.png` : "gpcs-keyart.png";
-    const link = document.createElement("a");
-    link.download = filename; link.href = dataUrl;
-    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    return await toPng(container, { pixelRatio: 1, width: 1200, height: 630 });
   } finally {
     document.body.removeChild(container);
   }
+}
+
+export async function downloadKeyArtOverlay(
+  state: KeyArtState,
+  result: CalculationResult,
+  gameName?: string,
+): Promise<void> {
+  const dataUrl = await captureKeyArtOverlay(state, result);
+  triggerDownload(dataUrl, keyArtFilename(gameName));
+}
+
+export async function generateKeyArtOverlayFile(
+  state: KeyArtState,
+  result: CalculationResult,
+  gameName?: string,
+): Promise<File> {
+  const dataUrl = await captureKeyArtOverlay(state, result);
+  return dataUrlToFile(dataUrl, keyArtFilename(gameName));
 }
 
 export async function downloadSquareBadge(result: CalculationResult, gameName?: string): Promise<void> {

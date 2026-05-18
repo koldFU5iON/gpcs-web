@@ -1,34 +1,58 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Download } from "lucide-react";
 import type { CalculationResult } from "@/lib/gpcs/types";
 import { TIER_HEX } from "@/lib/gpcs/tiers";
 import RatingBadge from "@/components/rate/RatingBadge";
+import { dataUrlToFile } from "@/lib/badge/share";
+
+type FileGenerator = () => Promise<File | null>;
 
 interface SlideBadgeCardProps {
   result: CalculationResult;
   gameName?: string;
+  onGenerator?: (gen: FileGenerator | null) => void;
 }
 
-export default function SlideBadgeCard({ result, gameName }: SlideBadgeCardProps) {
+function badgeCardFilename(gameName?: string): string {
+  const slug = gameName
+    ? gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+    : null;
+  return slug ? `gpcs-card-${slug}.png` : "gpcs-card.png";
+}
+
+export default function SlideBadgeCard({ result, gameName, onGenerator }: SlideBadgeCardProps) {
   const [isDownloading, setIsDownloading] = useState(false);
   const badgeRef = useRef<HTMLDivElement>(null);
   const tierColor = TIER_HEX[result.capacityTier];
 
+  // Snapshots the live RatingBadge element. Used by both download and share.
+  const captureBadge = useCallback(async (): Promise<string | null> => {
+    if (!badgeRef.current) return null;
+    const { toPng } = await import("html-to-image");
+    // bg-gpcs-slate/80 is semi-transparent; composite against the page bg so
+    // it renders identically to how it looks on screen
+    return toPng(badgeRef.current, { pixelRatio: 2, backgroundColor: "#0A0A0F" });
+  }, []);
+
+  const generateFile = useCallback(async (): Promise<File | null> => {
+    const dataUrl = await captureBadge();
+    if (!dataUrl) return null;
+    return dataUrlToFile(dataUrl, badgeCardFilename(gameName));
+  }, [captureBadge, gameName]);
+
+  useEffect(() => {
+    if (onGenerator) onGenerator(generateFile);
+  }, [generateFile, onGenerator]);
+
   const handleDownload = async () => {
-    if (!badgeRef.current) return;
     setIsDownloading(true);
     try {
-      const { toPng } = await import("html-to-image");
-      // bg-gpcs-slate/80 is semi-transparent; composite against the page bg so
-      // it renders identically to how it looks on screen
-      const dataUrl = await toPng(badgeRef.current, { pixelRatio: 2, backgroundColor: "#0A0A0F" });
-      const slug = gameName
-        ? gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
-        : null;
+      const dataUrl = await captureBadge();
+      if (!dataUrl) return;
       const link = document.createElement("a");
-      link.download = slug ? `gpcs-card-${slug}.png` : "gpcs-card.png";
+      link.download = badgeCardFilename(gameName);
       link.href = dataUrl;
       document.body.appendChild(link);
       link.click();
