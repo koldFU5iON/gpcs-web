@@ -9,12 +9,12 @@ function buildBadgeElement(result: CalculationResult, gameName?: string): HTMLDi
   const el = document.createElement("div");
   Object.assign(el.style, {
     position: "fixed", top: "0", left: "0", zIndex: "99999",
-    pointerEvents: "none", width: "560px", height: "700px",
+    pointerEvents: "none", width: "560px", height: "500px",
     fontFamily: "'Courier New', Courier, monospace",
     background: "#131320", border: `1px solid ${tierColor}40`,
     borderRadius: "12px",
     boxShadow: `0 0 60px ${tierColor}18, 0 0 120px ${tierColor}08`,
-    padding: "40px", boxSizing: "border-box", overflow: "hidden",
+    padding: "32px 40px", boxSizing: "border-box", overflow: "hidden",
     display: "flex", flexDirection: "column",
   });
 
@@ -32,16 +32,16 @@ function buildBadgeElement(result: CalculationResult, gameName?: string): HTMLDi
   Object.assign(header.style, {
     fontSize: "11px", fontWeight: "600", letterSpacing: "0.2em",
     textTransform: "uppercase", color: "#55557A",
-    marginBottom: "32px", marginTop: "8px",
+    marginBottom: "20px", marginTop: "8px",
   });
   header.textContent = "GPC Capacity Rating";
   el.appendChild(header);
 
   // Rating + independence row
   const ratingRow = document.createElement("div");
-  Object.assign(ratingRow.style, { display: "flex", alignItems: "baseline", gap: "16px", marginBottom: "12px" });
+  Object.assign(ratingRow.style, { display: "flex", alignItems: "baseline", gap: "16px", marginBottom: "10px" });
   const ratingEl = document.createElement("span");
-  Object.assign(ratingEl.style, { fontSize: "120px", fontWeight: "900", lineHeight: "1", color: tierColor });
+  Object.assign(ratingEl.style, { fontSize: "96px", fontWeight: "900", lineHeight: "1", color: tierColor });
   ratingEl.textContent = result.display;
   const indEl = document.createElement("span");
   Object.assign(indEl.style, { fontSize: "36px", fontWeight: "600", color: "#8888AA" });
@@ -59,12 +59,12 @@ function buildBadgeElement(result: CalculationResult, gameName?: string): HTMLDi
   // Divider
   const divider = document.createElement("div");
   divider.style.borderTop = `1px solid ${tierColor}20`;
-  divider.style.marginBottom = "24px";
+  divider.style.marginBottom = "16px";
   el.appendChild(divider);
 
   // Meta rows
   const metaWrap = document.createElement("div");
-  Object.assign(metaWrap.style, { display: "flex", flexDirection: "column", gap: "14px", flex: "1" });
+  Object.assign(metaWrap.style, { display: "flex", flexDirection: "column", gap: "12px" });
   for (const [label, value] of [
     ["Verification", result.verification],
     ["Version", `v${result.version}`],
@@ -107,7 +107,7 @@ export async function downloadBadge(result: CalculationResult, gameName?: string
   await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
 
   try {
-    const dataUrl = await toPng(el, { pixelRatio: 2, width: 560, height: 700 });
+    const dataUrl = await toPng(el, { pixelRatio: 2, width: 560, height: 500 });
 
     const slug = gameName
       ? gameName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")

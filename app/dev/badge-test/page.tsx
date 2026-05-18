@@ -65,7 +65,7 @@ export default function BadgeTestPage() {
           ref={captureRef}
           style={{
             width: "560px",
-            height: "700px",
+            height: "500px",
             fontFamily: "'Courier New', Courier, monospace",
             background: "#131320",
             border: `1px solid ${tierColor}40`,
